@@ -1,5 +1,5 @@
 *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
-:root{--g:linear-gradient(135deg,#7c5cff,#22d3ee 55%,#f472b6)}
+:root{--g:linear-gradient(135deg,#ff7a18,#ff2e63 55%,#7c5cff)}
 html,body{height:100%;background:#07060f;color:#eef;font:16px/1.45 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif;overflow:hidden}
 body:before{content:"";position:fixed;inset:-30%;background:radial-gradient(circle at 20% 20%,#7c5cff55,transparent 40%),radial-gradient(circle at 80% 30%,#22d3ee33,transparent 40%),radial-gradient(circle at 50% 90%,#f472b633,transparent 45%);animation:drift 18s ease-in-out infinite alternate;z-index:-1}
 @keyframes drift{to{transform:translate(6%,-4%) rotate(8deg)}}
