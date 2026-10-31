@@ -40,3 +40,15 @@ $('#setBtn').onclick=()=>{$('#apiUrl').value=api.url;$('#sheet').classList.add('
 $('#closeSet').onclick=()=>$('#sheet').classList.remove('on');
 $('#saveApi').onclick=()=>{localStorage.setItem('drago.api',$('#apiUrl').value.trim());$('#sheet').classList.remove('on')};
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+// voice input (Web Speech API); ?listen opens straight into listening
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+function listen(){
+  if(!SR){add(msgs,"🎤 Talking isn't supported in this browser yet. Try Chrome or Safari, or type instead!",'bot notice');return}
+  const r=new SR();r.lang='en-US';r.interimResults=true;const m=$('#mic');m.classList.add('live');
+  r.onresult=e=>{$('#chatIn').value=[...e.results].map(x=>x[0].transcript).join('')};
+  r.onend=()=>{m.classList.remove('live');if($('#chatIn').value.trim())$('#chatF').requestSubmit()};
+  r.onerror=e=>{m.classList.remove('live');if(e.error==='not-allowed')add(msgs,"🎤 I need permission to use the microphone.",'bot notice')};
+  r.start();
+}
+$('#mic').onclick=listen;
+if(location.search.includes('listen')){$('#splash').classList.add('gone');listen()}
