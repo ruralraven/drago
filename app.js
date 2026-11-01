@@ -46,6 +46,15 @@ function add(box,html,cls){const d=document.createElement('div');d.className='ms
 const typing='<span class="typing"><b></b><b></b><b></b></span>';
 function codeify(t){return esc(t).replace(/```\w*\n?([\s\S]*?)```/g,(_,c)=>'<pre><button class="copy">Copy</button><code>'+c+'</code></pre>').replace(/\n/g,'<br>')}
 document.addEventListener('click',e=>{if(e.target.classList.contains('copy')){navigator.clipboard?.writeText(e.target.nextSibling.textContent);e.target.textContent='Copied ✓';setTimeout(()=>e.target.textContent='Copy',1500)}});
+// read-aloud button on Drago's chat replies (browser voice, no key needed)
+function addSpeak(el){if(!('speechSynthesis' in window))return;const b=document.createElement('button');b.type='button';b.className='speak';b.textContent='🔊 Read aloud';b.setAttribute('aria-label','Read this answer out loud');el.appendChild(b)}
+document.addEventListener('click',e=>{const b=e.target.closest('.speak');if(!b)return;const ss=window.speechSynthesis;
+  if(b.classList.contains('live')){ss.cancel();return}
+  ss.cancel();document.querySelectorAll('.speak.live').forEach(x=>{x.classList.remove('live');x.textContent='🔊 Read aloud'});
+  const txt=[...b.parentNode.childNodes].filter(n=>n!==b&&!(n.nodeName==='PRE')).map(n=>n.textContent).join(' ').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\uFE0F]/gu,'').trim();
+  if(!txt)return;const u=new SpeechSynthesisUtterance(txt);u.lang='en-US';u.rate=1;
+  const done=()=>{b.classList.remove('live');b.textContent='🔊 Read aloud'};u.onend=done;u.onerror=done;
+  b.classList.add('live');b.textContent='⏹ Stop';ss.speak(u)});
 // splash
 $('#start').onclick=()=>{$('#splash').classList.add('gone');localStorage.setItem('drago.seen',1)};
 if(localStorage.getItem('drago.seen')&&!location.search.includes('splash'))$('#splash').classList.add('gone');
@@ -55,7 +64,7 @@ document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.query
 const msgs=$('#msgs'),hist=[];
 async function ask(text,image){
   const t=add(msgs,typing,'bot');
-  try{const r=await api.call('chat',{messages:hist,image});t.innerHTML=codeify(r.reply||'');hist.push({role:'assistant',content:r.reply})}
+  try{const r=await api.call('chat',{messages:hist,image});t.innerHTML=codeify(r.reply||'');addSpeak(t);hist.push({role:'assistant',content:r.reply})}
   catch(e){t.innerHTML=errText(e);t.classList.add('notice')}
 }
 $('#chatF').onsubmit=e=>{e.preventDefault();const v=$('#chatIn').value.trim();if(!v)return;$('#chatIn').value='';add(msgs,esc(v),'me');hist.push({role:'user',content:v});ask(v)};
