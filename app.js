@@ -2,7 +2,7 @@
 // Expected backend: POST {api}/chat {messages,image?} -> {reply}; /image {prompt} -> {url}; /video {prompt} -> {url}; /code {prompt} -> {reply}
 const $=s=>document.querySelector(s);
 // Free mode (default): Pollinations.ai — free, no API key, kid-safe settings. A custom server in Settings overrides it.
-const KID="You are Drago, a friendly dragon AI helper for a 10-year-old kid. Be kind, patient, helpful, clear and simple. Use short sentences and simple words, and a few fun emojis. Keep everything kid-safe. If asked about anything unsafe, scary, violent, adult, or about personal information, gently say you can't help with that and suggest asking a trusted grown-up. Never ask for personal info.";
+const KID="You are Drago, a friendly dragon AI helper for a 10-year-old kid. Be kind, patient, helpful, clear and simple. Use short sentences and simple words, and a few fun emojis. Keep everything kid-safe. If asked about anything unsafe, scary, violent, adult, or about personal information, gently say you can't help with that and suggest asking a trusted grown-up. Never ask for personal info. Do not call the user 'little one'. Keep answers under 120 words and make sure facts are correct.";
 const CODER="You are Drago's code helper for a 10-year-old kid. Write complete, runnable code (for web things, ONE full HTML file with CSS and JS inside) in a single code block, then explain it in 2-3 simple sentences. Keep it kid-safe.";
 const FREE='https://text.pollinations.ai/openai';
 async function freeText(sys,messages){
@@ -21,15 +21,26 @@ function freeImage(prompt){return new Promise((ok,no)=>{
   const u='https://image.pollinations.ai/prompt/'+encodeURIComponent(prompt+', kid friendly, cartoon style')+'?safe=true&nologo=true&width=768&height=768&seed='+Math.floor(Math.random()*1e6);
   const im=new Image();const tm=setTimeout(()=>no(new Error('slow')),120000);
   im.onload=()=>{clearTimeout(tm);ok({url:u})};im.onerror=()=>{clearTimeout(tm);no(new Error('img'))};im.src=u;})}
+// On-device AI (free, private, no key). Falls back to the free online AI if this device can't run it.
+let bubble=null;
+function prog(f){if(!bubble)return;const pc=Math.round(f*100);bubble.innerHTML='🐉 Downloading Drago\'s brain… use Wi-Fi<div class="pbar"><i style="width:'+pc+'%"></i></div><small>'+pc+'% · only the first time</small>'}
+async function brain(sys,messages,onTok){
+  if(localStorage.getItem('drago.local')!=='off'){
+    try{const L=await import('./local.js');
+      return await L.chat([{role:'system',content:sys},...messages],t=>{onTok&&onTok(t)},prog);
+    }catch(e){console.warn('on-device AI unavailable',e)}
+  }
+  const t=await freeText(sys,messages);onTok&&onTok(t);return t;
+}
 const api={
   get url(){return localStorage.getItem('drago.api')||''},
   async call(path,body){
     if(this.url){
-      const r=await fetch(this.url.replace(/\/$/,'')+'/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      const r=await fetch(this.url.replace(/\/$/,'')+'/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,onTok:undefined})});
       if(!r.ok) throw new Error('HTTP '+r.status); return r.json();
     }
-    if(path==='chat'){if(body.image)throw new Error('novision');return{reply:await freeText(KID,body.messages)}}
-    if(path==='code')return{reply:await freeText(CODER,[{role:'user',content:body.prompt}])};
+    if(path==='chat'){if(body.image)throw new Error('novision');return{reply:await brain(KID,body.messages.slice(-8),body.onTok)}}
+    if(path==='code')return{reply:await brain(CODER,[{role:'user',content:body.prompt}],body.onTok)};
     if(path==='image')return freeImage(body.prompt);
     if(path==='video')throw new Error('novideo');
     throw new Error('nc');
@@ -64,13 +75,13 @@ document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.query
 const msgs=$('#msgs'),hist=[];
 async function ask(text,image){
   const t=add(msgs,typing,'bot');
-  try{const r=await api.call('chat',{messages:hist,image});t.innerHTML=codeify(r.reply||'');addSpeak(t);hist.push({role:'assistant',content:r.reply})}
+  try{bubble=t;const r=await api.call('chat',{messages:hist.slice(),image,onTok:x=>{bubble=null;t.innerHTML=codeify(x);msgs.scrollTop=msgs.scrollHeight}});bubble=null;t.innerHTML=codeify(r.reply||'');addSpeak(t);hist.push({role:'assistant',content:r.reply})}
   catch(e){t.innerHTML=errText(e);t.classList.add('notice')}
 }
 $('#chatF').onsubmit=e=>{e.preventDefault();const v=$('#chatIn').value.trim();if(!v)return;$('#chatIn').value='';add(msgs,esc(v),'me');hist.push({role:'user',content:v});ask(v)};
 $('#pic').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{add(msgs,'<img src="'+rd.result+'">','me');hist.push({role:'user',content:'What is in this picture?'});ask('',rd.result)};rd.readAsDataURL(f);e.target.value=''};
 // studios
-function studio(btn,inp,out,path,render){$(btn).onclick=async()=>{const p=$(inp).value.trim()||$(inp).placeholder;const o=$(out);o.innerHTML='';const t=add(o,typing+(path==='image'?' 🎨 Drawing… (can take ~20s)':path==='code'?' 💻 Writing code…':''),'bot');try{t.innerHTML=render(await api.call(path,{prompt:p}))}catch(e){t.innerHTML=errText(e);t.classList.add('notice')}}}
+function studio(btn,inp,out,path,render){$(btn).onclick=async()=>{const p=$(inp).value.trim()||$(inp).placeholder;const o=$(out);o.innerHTML='';const t=add(o,typing+(path==='image'?' 🎨 Drawing… (can take ~20s)':path==='code'?' 💻 Writing code…':''),'bot');try{bubble=t;t.innerHTML=render(await api.call(path,{prompt:p,onTok:x=>{bubble=null;t.innerHTML=codeify(x)}}));bubble=null}catch(e){t.innerHTML=errText(e);t.classList.add('notice')}}}
 studio('#imgGo','#imgIn','#imgOut','image',r=>'<img src="'+esc(r.url)+'" style="width:100%;border-radius:14px">');
 studio('#vidGo','#vidIn','#vidOut','video',r=>'<video src="'+esc(r.url)+'" controls autoplay loop playsinline style="width:100%;border-radius:14px"></video>');
 studio('#codeGo','#codeIn','#codeOut','code',r=>codeify(r.reply||''));
