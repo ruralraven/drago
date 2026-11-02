@@ -101,6 +101,9 @@ $('#pic').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileR
 // studios
 function studio(btn,inp,out,path,render){$(btn).onclick=async()=>{const p=$(inp).value.trim()||$(inp).placeholder;const o=$(out);o.innerHTML='';const t=add(o,typing+(path==='image'?' 🎨 Drawing… (can take ~20s)':path==='code'?' 💻 Writing code…':''),'bot');try{bubble=t;t.innerHTML=render(await api.call(path,{prompt:p,onTok:x=>{bubble=null;t.innerHTML=codeify(x)}}));bubble=null}catch(e){t.innerHTML=errText(e);t.classList.add('notice')}}}
 studio('#imgGo','#imgIn','#imgOut','image',r=>'<img src="'+esc(r.url)+'" alt="Picture Drago made" style="width:100%;border-radius:14px"><div class="imgacts"><button type="button" class="again">🔁 Make another</button><a class="open" href="'+esc(r.url)+'" target="_blank" rel="noopener">🔍 Full size</a></div>');
+// Image Studio: "Surprise me" fills in a random fun picture idea
+const IDEAS=['A dragon baking cupcakes in a cozy kitchen','A robot surfing a giant wave at sunset','A castle made of candy on a cloud','An astronaut cat floating past Saturn','A neon cube racing through a city at night','A friendly octopus playing drums under the sea','A treehouse city in a glowing forest','A penguin knight riding a polar bear','A volcano that erupts rainbow sprinkles','A tiny dragon sleeping in a teacup'];
+$('#imgDice').onclick=()=>{const cur=$('#imgIn').value;let n;do{n=IDEAS[Math.floor(Math.random()*IDEAS.length)]}while(n===cur);$('#imgIn').value=n;$('#imgIn').focus()};
 // Image Studio: "Make another" paints a new version of the same idea
 $('#imgOut').addEventListener('click',e=>{if(e.target.closest('.again'))$('#imgGo').click()});
 studio('#vidGo','#vidIn','#vidOut','video',r=>'<video src="'+esc(r.url)+'" controls autoplay loop playsinline style="width:100%;border-radius:14px"></video>');
