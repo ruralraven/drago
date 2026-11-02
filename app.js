@@ -106,6 +106,8 @@ const IDEAS=['A dragon baking cupcakes in a cozy kitchen','A robot surfing a gia
 $('#imgDice').onclick=()=>{const cur=$('#imgIn').value;let n;do{n=IDEAS[Math.floor(Math.random()*IDEAS.length)]}while(n===cur);$('#imgIn').value=n;$('#imgIn').focus()};
 // Image Studio: "Make another" paints a new version of the same idea
 $('#imgOut').addEventListener('click',e=>{if(e.target.closest('.again'))$('#imgGo').click()});
+const VIDEAS=['A cube dashing through a neon city','A baby dragon learning to fly over a rainbow','A rocket blasting off to a candy planet','A robot dancing in a disco under the sea','A cat surfing a giant wave at sunset','A volcano that erupts glitter and confetti','A spaceship racing through a field of glowing asteroids','A penguin riding a skateboard down a snowy mountain'];
+$('#vidDice').onclick=()=>{const cur=$('#vidIn').value;let n;do{n=VIDEAS[Math.floor(Math.random()*VIDEAS.length)]}while(n===cur);$('#vidIn').value=n;$('#vidIn').focus()};
 studio('#vidGo','#vidIn','#vidOut','video',r=>'<video src="'+esc(r.url)+'" controls autoplay loop playsinline style="width:100%;border-radius:14px"></video>');
 studio('#codeGo','#codeIn','#codeOut','code',r=>codeify(r.reply||''));
 // settings
