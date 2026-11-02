@@ -5,40 +5,51 @@ const $=s=>document.querySelector(s);
 const KID="You are Drago, a friendly dragon AI helper for a 10-year-old kid. Be kind, patient, helpful, clear and simple. Use short sentences and simple words, and a few fun emojis. Keep everything kid-safe. If asked about anything unsafe, scary, violent, adult, or about personal information, gently say you can't help with that and suggest asking a trusted grown-up. Never ask for personal info. Do not call the user 'little one'. Keep answers under 120 words and make sure facts are correct.";
 const CODER="You are Drago's code helper for a 10-year-old kid. Write complete, runnable code (for web things, ONE full HTML file with CSS and JS inside) in a single code block, then explain it in 2-3 simple sentences. Keep it kid-safe.";
 const FREE='https://text.pollinations.ai/openai';
+const withTimeout=(ms,f)=>{const c=new AbortController(),t=setTimeout(()=>c.abort(),ms);return f(c.signal).finally(()=>clearTimeout(t))};
 async function freeText(sys,messages){
+  const msgs=[{role:'system',content:sys},...messages.slice(-12)];
   let last;
-  for(let i=0;i<2;i++){try{
-    const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),90000);
-    const r=await fetch(FREE,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctl.signal,body:JSON.stringify({model:'openai',messages:[{role:'system',content:sys},...messages.slice(-12)],safe:true,referrer:'drago'})});
-    clearTimeout(tm);
-    if(r.status===429)throw new Error('busy');
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    const j=await r.json();const t=j.choices?.[0]?.message?.content;if(!t)throw new Error('empty');return t;
-  }catch(e){last=e;await new Promise(z=>setTimeout(z,2500))}}
+  // 1) OpenAI-style POST  2) plain GET endpoint — both free, no key, CORS-open
+  for(let i=0;i<3;i++){try{
+    if(i<2){
+      const r=await withTimeout(35000,sg=>fetch(FREE,{method:'POST',headers:{'Content-Type':'application/json'},signal:sg,body:JSON.stringify({model:'openai',messages:msgs,safe:true,referrer:'drago'})}));
+      if(!r.ok)throw new Error(r.status===429?'busy':'HTTP '+r.status);
+      const j=await r.json();const t=(j.choices?.[0]?.message?.content||'').trim();if(t)return t;throw new Error('empty');
+    }else{
+      const q=messages.filter(m=>m.role==='user').slice(-1)[0]?.content||'hi';
+      const r=await withTimeout(35000,sg=>fetch('https://text.pollinations.ai/'+encodeURIComponent(q)+'?safe=true&referrer=drago&system='+encodeURIComponent(sys),{signal:sg}));
+      if(!r.ok)throw new Error('HTTP '+r.status);const t=(await r.text()).trim();if(t)return t;throw new Error('empty');
+    }
+  }catch(e){last=e;console.warn('free AI try',i,e)}}
   throw last;
 }
 function freeImage(prompt){return new Promise((ok,no)=>{
   const u='https://image.pollinations.ai/prompt/'+encodeURIComponent(prompt+', kid friendly, cartoon style')+'?safe=true&nologo=true&width=768&height=768&seed='+Math.floor(Math.random()*1e6);
   const im=new Image();const tm=setTimeout(()=>no(new Error('slow')),120000);
   im.onload=()=>{clearTimeout(tm);ok({url:u})};im.onerror=()=>{clearTimeout(tm);no(new Error('img'))};im.src=u;})}
-// On-device AI (free, private, no key). Falls back to the free online AI if this device can't run it.
+// Answer order: online free AI (fast, light on the phone) -> on-device AI (if online fails) -> friendly error.
+// Crash guard: if the page died while loading the on-device model (iPhone memory), skip on-device next time.
 let bubble=null;
 function prog(f){if(!bubble)return;const pc=Math.round(f*100);bubble.innerHTML='🐉 Downloading Drago\'s brain… use Wi-Fi<div class="pbar"><i style="width:'+pc+'%"></i></div><small>'+pc+'% · only the first time</small>'}
+if(localStorage.getItem('drago.loadingLocal')){localStorage.removeItem('drago.loadingLocal');localStorage.setItem('drago.local','off')}
+async function onDevice(sys,messages,onTok){
+  if(localStorage.getItem('drago.local')==='off')throw new Error('nolocal');
+  localStorage.setItem('drago.loadingLocal','1');
+  try{const L=await import('./local.js');return await L.chat([{role:'system',content:sys},...messages],t=>{onTok&&onTok(t)},prog)}
+  finally{localStorage.removeItem('drago.loadingLocal')}
+}
 async function brain(sys,messages,onTok){
-  if(localStorage.getItem('drago.local')!=='off'){
-    try{const L=await import('./local.js');
-      return await L.chat([{role:'system',content:sys},...messages],t=>{onTok&&onTok(t)},prog);
-    }catch(e){console.warn('on-device AI unavailable',e)}
-  }
-  const t=await freeText(sys,messages);onTok&&onTok(t);return t;
+  try{const t=await freeText(sys,messages);onTok&&onTok(t);return t}
+  catch(e){console.warn('online AI failed, trying on-device',e);
+    if(!navigator.onLine||e)try{return await onDevice(sys,messages,onTok)}catch(e2){console.warn('on-device failed',e2);throw new Error(navigator.onLine?'allfail':'offline')}}
 }
 const api={
   get url(){return localStorage.getItem('drago.api')||''},
   async call(path,body){
-    if(this.url){
-      const r=await fetch(this.url.replace(/\/$/,'')+'/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,onTok:undefined})});
-      if(!r.ok) throw new Error('HTTP '+r.status); return r.json();
-    }
+    if(this.url){try{
+      const r=await withTimeout(30000,sg=>fetch(this.url.replace(/\/$/,'')+'/'+path,{method:'POST',signal:sg,headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,onTok:undefined})}));
+      if(!r.ok) throw new Error('HTTP '+r.status); return await r.json();
+    }catch(e){console.warn('custom server failed, using free AI',e)}}
     if(path==='chat'){if(body.image)throw new Error('novision');return{reply:await brain(KID,body.messages.slice(-8),body.onTok)}}
     if(path==='code')return{reply:await brain(CODER,[{role:'user',content:body.prompt}],body.onTok)};
     if(path==='image')return freeImage(body.prompt);
@@ -51,6 +62,8 @@ const errText=e=>({novision:"📷 I can't look at pictures yet in free mode — 
   busy:"🐉💤 Lots of people are using the free AI right now. Wait a few seconds and try again!",
   slow:"🐢 The picture is taking too long. Please try again!",
   img:"😕 I couldn't make that picture. Try different words!",
+  allfail:"🐉 Drago's brain is having trouble right now. Please wait a minute and try again! (If it keeps happening, try Wi-Fi.)",
+  offline:"📶 You're offline. Connect to Wi-Fi or data and ask again!",
   AbortError:"🐢 That took too long. Please try again!"})[e.message==='nc'?'':(e.name==='AbortError'?'AbortError':e.message)]||"😕 Oops, I couldn't reach the AI. Check the internet and try again!";
 const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 function add(box,html,cls){const d=document.createElement('div');d.className='msg '+cls;d.innerHTML=html;box.appendChild(d);box.scrollTop=box.scrollHeight;return d}
@@ -91,7 +104,8 @@ studio('#codeGo','#codeIn','#codeOut','code',r=>codeify(r.reply||''));
 $('#setBtn').onclick=()=>{$('#apiUrl').value=api.url;$('#sheet').classList.add('on')};
 $('#closeSet').onclick=()=>$('#sheet').classList.remove('on');
 $('#saveApi').onclick=()=>{localStorage.setItem('drago.api',$('#apiUrl').value.trim());$('#sheet').classList.remove('on')};
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').then(r=>r.update()).catch(()=>{});
+  let reloaded=!navigator.serviceWorker.controller;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloaded||document.querySelector('.msg.me'))return;reloaded=true;location.reload()})}
 // voice input (Web Speech API); ?listen opens straight into listening
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 function listen(){

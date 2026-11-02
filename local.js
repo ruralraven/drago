@@ -10,7 +10,7 @@ export async function load(onProg){
   loading=(async()=>{
     if(!new URLSearchParams(location.search).has('cpu')){const g=await gpu();if(g){
       try{const w=await import(WEBLLM);
-        eng=await w.CreateMLCEngine(g.f16?GPU_MODEL:GPU_MODEL.replace('q4f16','q4f32'),{initProgressCallback:p=>onProg(p.progress||0,p.text||'')});
+        const M=/iPhone|iPad/.test(navigator.userAgent)?'Qwen2.5-0.5B-Instruct-q4f16_1-MLC':GPU_MODEL;eng=await w.CreateMLCEngine(g.f16?M:M.replace('q4f16','q4f32'),{initProgressCallback:p=>onProg(p.progress||0,p.text||'')});
         return kind='webgpu';}catch(e){console.warn('WebLLM failed, trying wasm',e)}
     }}
     const t=await import(TFJS);
