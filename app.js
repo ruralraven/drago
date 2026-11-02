@@ -154,3 +154,6 @@ $('#newChat').onclick=()=>{if(hist.length&&!confirm('Start a new chat? This clea
   window.speechSynthesis&&speechSynthesis.cancel();hist.length=0;bubble=null;
   [...msgs.children].forEach((c,i)=>{if(i>0&&c!==chips)c.remove()});if(chips)chips.hidden=false;
   document.querySelector('nav button')?.click();$('#chatIn').value='';$('#chatIn').focus()};
+// Friendly hello that matches the time of day (morning / afternoon / evening)
+(()=>{const h=new Date().getHours(),g=h<5?'Hi, night owl! 🦉':h<12?'Good morning! ☀️':h<17?'Good afternoon! 🌤️':'Good evening! 🌙';
+  const first=msgs.firstElementChild;if(first&&first.firstChild&&first.firstChild.nodeType===3)first.firstChild.textContent=first.firstChild.textContent.replace(/^Hi!/,g)})();
