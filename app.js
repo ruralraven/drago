@@ -80,11 +80,15 @@ document.addEventListener('click',e=>{const b=e.target.closest('.save');if(!b)re
   const u=URL.createObjectURL(new Blob([code],{type:'text/html'}));const a=document.createElement('a');a.href=u;a.download='drago-code.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
   b.textContent='Saved ✓';setTimeout(()=>b.textContent='⬇ Save',1500)});
 // read-aloud button on Drago's chat replies (browser voice, no key needed)
-function addSpeak(el){if(!('speechSynthesis' in window))return;const b=document.createElement('button');b.type='button';b.className='speak';b.textContent='🔊 Read aloud';b.setAttribute('aria-label','Read this answer out loud');el.appendChild(b)}
+function addSpeak(el){addCopy(el);if(!('speechSynthesis' in window))return;const b=document.createElement('button');b.type='button';b.className='speak';b.textContent='🔊 Read aloud';b.setAttribute('aria-label','Read this answer out loud');el.appendChild(b)}
+// Chat: "Copy answer" button copies Drago's reply text
+function addCopy(el){const b=document.createElement('button');b.type='button';b.className='copyans';b.textContent='📋 Copy';b.setAttribute('aria-label','Copy this answer');el.appendChild(b)}
+document.addEventListener('click',async e=>{const b=e.target.closest('.copyans');if(!b)return;const txt=[...b.parentNode.childNodes].filter(n=>!(n.nodeType===1&&n.matches('button,.speak,.copyans'))).map(n=>n.textContent).join(' ').replace(/\s+/g,' ').trim();
+  try{await navigator.clipboard.writeText(txt);b.textContent='Copied ✓'}catch(_){b.textContent='Could not copy'}setTimeout(()=>b.textContent='📋 Copy',1500)});
 document.addEventListener('click',e=>{const b=e.target.closest('.speak');if(!b)return;const ss=window.speechSynthesis;
   if(b.classList.contains('live')){ss.cancel();return}
   ss.cancel();document.querySelectorAll('.speak.live').forEach(x=>{x.classList.remove('live');x.textContent='🔊 Read aloud'});
-  const txt=[...b.parentNode.childNodes].filter(n=>n!==b&&!(n.nodeName==='PRE')).map(n=>n.textContent).join(' ').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\uFE0F]/gu,'').trim();
+  const txt=[...b.parentNode.childNodes].filter(n=>n!==b&&!(n.nodeName==='PRE')&&!(n.nodeName==='BUTTON')).map(n=>n.textContent).join(' ').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\uFE0F]/gu,'').trim();
   if(!txt)return;const u=new SpeechSynthesisUtterance(txt);u.lang='en-US';u.rate=1;
   const done=()=>{b.classList.remove('live');b.textContent='🔊 Read aloud'};u.onend=done;u.onerror=done;
   b.classList.add('live');b.textContent='⏹ Stop';ss.speak(u)});
