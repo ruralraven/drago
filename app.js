@@ -126,7 +126,9 @@ $('#imgOut').addEventListener('click',async e=>{const b=e.target.closest('.savep
   setTimeout(()=>b.textContent='⬇ Save picture',1500)});
 const VIDEAS=['A cube dashing through a neon city','A baby dragon learning to fly over a rainbow','A rocket blasting off to a candy planet','A robot dancing in a disco under the sea','A cat surfing a giant wave at sunset','A volcano that erupts glitter and confetti','A spaceship racing through a field of glowing asteroids','A penguin riding a skateboard down a snowy mountain'];
 $('#vidDice').onclick=()=>{const cur=$('#vidIn').value;let n;do{n=VIDEAS[Math.floor(Math.random()*VIDEAS.length)]}while(n===cur);$('#vidIn').value=n;$('#vidIn').focus()};
-studio('#vidGo','#vidIn','#vidOut','video',r=>'<video src="'+esc(r.url)+'" controls autoplay loop playsinline style="width:100%;border-radius:14px"></video>');
+studio('#vidGo','#vidIn','#vidOut','video',r=>'<video src="'+esc(r.url)+'" controls autoplay loop playsinline style="width:100%;border-radius:14px"></video><div class="imgacts"><button type="button" class="again" aria-label="Make a new video of the same idea">🔁 Make another</button><a class="open" href="'+esc(r.url)+'" target="_blank" rel="noopener">🔍 Full size</a></div>');
+// Video Studio: "Make another" makes a new video of the same idea
+$('#vidOut').addEventListener('click',e=>{if(e.target.closest('.again'))$('#vidGo').click()});
 // Code Lab: "Surprise me" fills in a random fun coding idea
 const CIDEAS=['Make a button that changes color when I click it','Make a dice roller that shows a random number from 1 to 6','Make a star that follows my mouse','Make a simple clicker game with a score','Make a page with a bouncing ball','Make a rainbow text that keeps changing colors','Make a quiz with 3 math questions','Make a stopwatch with start and stop buttons','Make a dragon emoji that jumps when I press space'];
 $('#codeDice').onclick=()=>{const cur=$('#codeIn').value;let n;do{n=CIDEAS[Math.floor(Math.random()*CIDEAS.length)]}while(n===cur);$('#codeIn').value=n;$('#codeIn').focus()};
