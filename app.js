@@ -52,7 +52,7 @@ const api={
     }catch(e){console.warn('custom server failed, using free AI',e)}}
     if(path==='chat'){if(body.image)throw new Error('novision');return{reply:await brain(KID,body.messages.slice(-8),body.onTok)}}
     if(path==='code')return{reply:await brain(CODER,[{role:'user',content:body.prompt}],body.onTok)};
-    if(path==='image')return freeImage(body.prompt);
+    if(path==='image')return freeImage(body.prompt+(imgStyle?', '+imgStyle:''));
     if(path==='video')throw new Error('novideo');
     throw new Error('nc');
   }
@@ -108,6 +108,11 @@ $('#chatF').onsubmit=e=>{e.preventDefault();const v=$('#chatIn').value.trim();if
 $('#pic').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{add(msgs,'<img src="'+rd.result+'">','me');hist.push({role:'user',content:'What is in this picture?'});ask('',rd.result)};rd.readAsDataURL(f);e.target.value=''};
 // studios
 function studio(btn,inp,out,path,render){$(btn).onclick=async()=>{const B=$(btn);if(B.disabled)return;const lbl=B.textContent;B.disabled=true;B.classList.add('busy');B.textContent='⏳ Working…';const p=$(inp).value.trim()||$(inp).placeholder;const o=$(out);o.innerHTML='';const t=add(o,typing+(path==='image'?' 🎨 Drawing… (can take ~20s)':path==='code'?' 💻 Writing code…':''),'bot');try{bubble=t;t.innerHTML=render(await api.call(path,{prompt:p,onTok:x=>{bubble=null;t.innerHTML=codeify(x)}}));bubble=null}catch(e){t.innerHTML=errText(e);t.classList.add('notice')}finally{B.disabled=false;B.classList.remove('busy');B.textContent=lbl}}}
+// Image Studio: style chips (Cartoon, Pixel art, Watercolor, 3D, Sketch); remembers your pick
+let imgStyle=localStorage.getItem('drago.imgStyle')||'';
+const styleBox=$('#imgStyle');
+function showStyle(){styleBox&&styleBox.querySelectorAll('button').forEach(b=>{const on=b.dataset.s===imgStyle;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)})}
+if(styleBox){styleBox.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;imgStyle=b.dataset.s;localStorage.setItem('drago.imgStyle',imgStyle);showStyle()});showStyle()}
 studio('#imgGo','#imgIn','#imgOut','image',r=>'<img src="'+esc(r.url)+'" alt="Picture Drago made" style="width:100%;border-radius:14px"><div class="imgacts"><button type="button" class="again">🔁 Make another</button><button type="button" class="savepic" data-u="'+esc(r.url)+'" aria-label="Save this picture">⬇ Save picture</button><a class="open" href="'+esc(r.url)+'" target="_blank" rel="noopener">🔍 Full size</a></div>');
 // Image Studio: "Surprise me" fills in a random fun picture idea
 const IDEAS=['A dragon baking cupcakes in a cozy kitchen','A robot surfing a giant wave at sunset','A castle made of candy on a cloud','An astronaut cat floating past Saturn','A neon cube racing through a city at night','A friendly octopus playing drums under the sea','A treehouse city in a glowing forest','A penguin knight riding a polar bear','A volcano that erupts rainbow sprinkles','A tiny dragon sleeping in a teacup'];
