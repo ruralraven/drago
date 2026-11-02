@@ -68,8 +68,13 @@ const errText=e=>({novision:"📷 I can't look at pictures yet in free mode — 
 const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 function add(box,html,cls){const d=document.createElement('div');d.className='msg '+cls;d.innerHTML=html;box.appendChild(d);box.scrollTop=box.scrollHeight;return d}
 const typing='<span class="typing"><b></b><b></b><b></b></span>';
-function codeify(t){return esc(t).replace(/```\w*\n?([\s\S]*?)```/g,(_,c)=>'<pre><button class="copy">Copy</button><code>'+c+'</code></pre>').replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>')}
+function codeify(t){return esc(t).replace(/```\w*\n?([\s\S]*?)```/g,(_,c)=>'<pre>'+(/&lt;(!doctype|html|body|canvas|button|div|script)/i.test(c)?'<button type="button" class="run">▶ Run it</button>':'')+'<button class="copy">Copy</button><code>'+c+'</code></pre>').replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>')}
 document.addEventListener('click',e=>{if(e.target.classList.contains('copy')){navigator.clipboard?.writeText(e.target.nextSibling.textContent);e.target.textContent='Copied ✓';setTimeout(()=>e.target.textContent='Copy',1500)}});
+// Code Lab: "Run it" shows web code working, inside a safe sandbox box (no access to Drago or your data)
+document.addEventListener('click',e=>{const b=e.target.closest('.run');if(!b)return;const pre=b.closest('pre');let f=pre.nextElementSibling;
+  if(f&&f.classList.contains('preview')){f.remove();b.textContent='▶ Run it';return}
+  f=document.createElement('iframe');f.className='preview';f.title='Your code running';f.setAttribute('sandbox','allow-scripts');f.srcdoc=pre.querySelector('code').textContent;
+  pre.after(f);b.textContent='✖ Close';f.scrollIntoView({behavior:'smooth',block:'nearest'})});
 // read-aloud button on Drago's chat replies (browser voice, no key needed)
 function addSpeak(el){if(!('speechSynthesis' in window))return;const b=document.createElement('button');b.type='button';b.className='speak';b.textContent='🔊 Read aloud';b.setAttribute('aria-label','Read this answer out loud');el.appendChild(b)}
 document.addEventListener('click',e=>{const b=e.target.closest('.speak');if(!b)return;const ss=window.speechSynthesis;
