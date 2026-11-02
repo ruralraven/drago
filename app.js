@@ -91,3 +91,8 @@ function listen(){
 }
 $('#mic').onclick=listen;
 if(location.search.includes('listen')){$('#splash').classList.add('gone');listen()}
+
+// idea chips: tap one to ask it; they hide after the first message
+const chips=$('#chips');
+if(chips)chips.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$('#chatIn').value=b.textContent.replace(/^\S+\s/,'');$('#chatF').requestSubmit()});
+$('#chatF').addEventListener('submit',()=>chips&&chips.remove());

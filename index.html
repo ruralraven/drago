@@ -9,7 +9,7 @@
 <div id="app">
 <header><img src="logo.svg" class="hlogo"><b>Drago <span class="pro">PRO</span></b><button id="setBtn" class="icon" aria-label="Settings">⚙︎</button></header>
 <main>
-<section id="t-chat" class="tab on"><div id="msgs" class="msgs"><div class="msg bot">Hi! I'm Drago ✨ Ask me anything, or send me a picture and I'll tell you what's in it.</div></div>
+<section id="t-chat" class="tab on"><div id="msgs" class="msgs"><div class="msg bot">Hi! I'm Drago ✨ Ask me anything, or send me a picture and I'll tell you what's in it.</div><div id="chips" class="chips" aria-label="Ideas to ask"><button type="button">🦖 Tell me a dinosaur fact</button><button type="button">😂 Tell me a joke</button><button type="button">🎮 Give me a game idea</button><button type="button">🧠 Quiz me on math</button></div></div>
 <form id="chatF" class="bar"><label class="icon cam" title="Send a picture">📷<input id="pic" type="file" accept="image/*" capture="environment" hidden></label><button type="button" id="mic" class="icon mic" aria-label="Talk">🎤</button><input id="chatIn" placeholder="Ask Drago anything…" autocomplete="off"><button class="send">➤</button></form></section>
 <section id="t-image" class="tab"><h2>Image Studio</h2><p class="sub">Describe a picture and Drago will paint it.</p><textarea id="imgIn" placeholder="A dragon made of galaxies riding a skateboard"></textarea><button class="cta" id="imgGo">✨ Generate Image</button><div id="imgOut" class="out"></div></section>
 <section id="t-video" class="tab"><h2>Video Studio</h2><p class="sub">Turn an idea into a short video.</p><textarea id="vidIn" placeholder="A cube dashing through a neon city"></textarea><button class="cta" id="vidGo">🎬 Generate Video</button><div id="vidOut" class="out"></div></section>
