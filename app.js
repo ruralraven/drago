@@ -148,4 +148,9 @@ if(location.search.includes('listen')){$('#splash').classList.add('gone');listen
 // idea chips: tap one to ask it; they hide after the first message
 const chips=$('#chips');
 if(chips)chips.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$('#chatIn').value=b.textContent.replace(/^\S+\s/,'');$('#chatF').requestSubmit()});
-$('#chatF').addEventListener('submit',()=>chips&&chips.remove());
+$('#chatF').addEventListener('submit',()=>{if(chips)chips.hidden=true});
+// New chat button: clears the conversation (keeps Drago's hello and the idea chips)
+$('#newChat').onclick=()=>{if(hist.length&&!confirm('Start a new chat? This clears the messages.'))return;
+  window.speechSynthesis&&speechSynthesis.cancel();hist.length=0;bubble=null;
+  [...msgs.children].forEach((c,i)=>{if(i>0&&c!==chips)c.remove()});if(chips)chips.hidden=false;
+  document.querySelector('nav button')?.click();$('#chatIn').value='';$('#chatIn').focus()};

@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="app.css"></head><body>
 <div id="splash"><img src="logo.svg" class="slogo"><h1><span>Drago</span></h1><p>Your brilliant assistant</p><button id="start" class="cta">Get Started</button></div>
 <div id="app">
-<header><img src="logo.svg" class="hlogo"><b>Drago <span class="pro">PRO</span></b><button id="setBtn" class="icon" aria-label="Settings">⚙︎</button></header>
+<header><img src="logo.svg" class="hlogo"><b>Drago <span class="pro">PRO</span></b><button id="newChat" class="icon" aria-label="Start a new chat" title="New chat">🆕</button><button id="setBtn" class="icon" aria-label="Settings">⚙︎</button></header>
 <main>
 <section id="t-chat" class="tab on"><div id="msgs" class="msgs"><div class="msg bot">Hi! I'm Drago ✨ Ask me anything, or send me a picture and I'll tell you what's in it.</div><div id="chips" class="chips" aria-label="Ideas to ask"><button type="button">🦖 Tell me a dinosaur fact</button><button type="button">😂 Tell me a joke</button><button type="button">🎮 Give me a game idea</button><button type="button">🧠 Quiz me on math</button></div></div>
 <form id="chatF" class="bar" action="javascript:void 0" onsubmit="return false"><label class="icon cam" title="Send a picture">📷<input id="pic" type="file" accept="image/*" capture="environment" hidden></label><button type="button" id="mic" class="icon mic" aria-label="Talk">🎤</button><input id="chatIn" placeholder="Ask Drago anything…" autocomplete="off"><button class="send">➤</button></form></section>
