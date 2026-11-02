@@ -82,7 +82,9 @@ $('#chatF').onsubmit=e=>{e.preventDefault();const v=$('#chatIn').value.trim();if
 $('#pic').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{add(msgs,'<img src="'+rd.result+'">','me');hist.push({role:'user',content:'What is in this picture?'});ask('',rd.result)};rd.readAsDataURL(f);e.target.value=''};
 // studios
 function studio(btn,inp,out,path,render){$(btn).onclick=async()=>{const p=$(inp).value.trim()||$(inp).placeholder;const o=$(out);o.innerHTML='';const t=add(o,typing+(path==='image'?' 🎨 Drawing… (can take ~20s)':path==='code'?' 💻 Writing code…':''),'bot');try{bubble=t;t.innerHTML=render(await api.call(path,{prompt:p,onTok:x=>{bubble=null;t.innerHTML=codeify(x)}}));bubble=null}catch(e){t.innerHTML=errText(e);t.classList.add('notice')}}}
-studio('#imgGo','#imgIn','#imgOut','image',r=>'<img src="'+esc(r.url)+'" style="width:100%;border-radius:14px">');
+studio('#imgGo','#imgIn','#imgOut','image',r=>'<img src="'+esc(r.url)+'" alt="Picture Drago made" style="width:100%;border-radius:14px"><div class="imgacts"><button type="button" class="again">🔁 Make another</button><a class="open" href="'+esc(r.url)+'" target="_blank" rel="noopener">🔍 Full size</a></div>');
+// Image Studio: "Make another" paints a new version of the same idea
+$('#imgOut').addEventListener('click',e=>{if(e.target.closest('.again'))$('#imgGo').click()});
 studio('#vidGo','#vidIn','#vidOut','video',r=>'<video src="'+esc(r.url)+'" controls autoplay loop playsinline style="width:100%;border-radius:14px"></video>');
 studio('#codeGo','#codeIn','#codeOut','code',r=>codeify(r.reply||''));
 // settings
