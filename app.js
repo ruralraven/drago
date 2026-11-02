@@ -82,7 +82,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.save');if(!b)re
 // read-aloud button on Drago's chat replies (browser voice, no key needed)
 function addSpeak(el){addCopy(el);if(!('speechSynthesis' in window))return;const b=document.createElement('button');b.type='button';b.className='speak';b.textContent='🔊 Read aloud';b.setAttribute('aria-label','Read this answer out loud');el.appendChild(b)}
 // Chat: "Copy answer" button copies Drago's reply text
-function addCopy(el){const b=document.createElement('button');b.type='button';b.className='copyans';b.textContent='📋 Copy';b.setAttribute('aria-label','Copy this answer');el.appendChild(b)}
+function addCopy(el){el.appendChild(document.createElement('br'));const b=document.createElement('button');b.type='button';b.className='copyans';b.textContent='📋 Copy';b.setAttribute('aria-label','Copy this answer');el.appendChild(b)}
 document.addEventListener('click',async e=>{const b=e.target.closest('.copyans');if(!b)return;const txt=[...b.parentNode.childNodes].filter(n=>!(n.nodeType===1&&n.matches('button,.speak,.copyans'))).map(n=>n.textContent).join(' ').replace(/\s+/g,' ').trim();
   try{await navigator.clipboard.writeText(txt);b.textContent='Copied ✓'}catch(_){b.textContent='Could not copy'}setTimeout(()=>b.textContent='📋 Copy',1500)});
 document.addEventListener('click',e=>{const b=e.target.closest('.speak');if(!b)return;const ss=window.speechSynthesis;
