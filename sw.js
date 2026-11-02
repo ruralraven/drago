@@ -1,4 +1,4 @@
-const C='drago-v13',F=['./','index.html','app.css','app.js','local.js','logo.svg','manifest.webmanifest','icon-192.png','icon-512.png'];
+const C='drago-v14',F=['./','index.html','app.css','app.js','local.js','logo.svg','manifest.webmanifest','icon-192.png','icon-512.png'];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(F)))});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim())));
 // network first (so updates show up), cache when offline; never touch AI requests
