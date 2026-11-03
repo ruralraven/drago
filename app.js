@@ -182,3 +182,9 @@ $('#newChat').onclick=()=>{if(hist.length&&!confirm('Start a new chat? This clea
 ['#imgIn','#vidIn','#codeIn'].forEach(s=>{const t=$(s);if(!t)return;const k='drago-draft-'+s.slice(1);try{const v=localStorage.getItem(k);if(v&&!t.value)t.value=v}catch(e){}
 t.addEventListener('input',()=>{try{t.value.trim()?localStorage.setItem(k,t.value):localStorage.removeItem(k)}catch(e){}})});
 ['#imgGo','#vidGo','#codeGo'].forEach(b=>{const x=$(b);if(x)x.addEventListener('click',()=>{try{localStorage.removeItem('drago-draft-'+b.slice(1,-2)+'In')}catch(e){}})});
+// Studios: a small ✖ button clears the text box (shows only when there is text)
+['#imgIn','#vidIn','#codeIn'].forEach(s=>{const t=$(s);if(!t||t.parentNode.classList.contains('tawrap'))return;const w=document.createElement('div');w.className='tawrap';t.parentNode.insertBefore(w,t);w.appendChild(t);
+const b=document.createElement('button');b.type='button';b.className='clr';b.textContent='✖';b.setAttribute('aria-label','Clear the text box');b.title='Clear';w.appendChild(b);
+const sync=()=>{b.hidden=!t.value};sync();t.addEventListener('input',sync);
+['#imgDice','#vidDice','#codeDice'].forEach(d=>{const x=$(d);if(x)x.addEventListener('click',()=>setTimeout(sync))});
+b.onclick=()=>{t.value='';try{localStorage.removeItem('drago-draft-'+s.slice(1))}catch(e){}sync();t.focus()}});

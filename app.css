@@ -87,3 +87,6 @@ nav .on{background:#ffffff16;color:#fff;box-shadow:inset 0 0 0 1px #7c5cff88}
 #netNote{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 62px);transform:translate(-50%,-20px);opacity:0;pointer-events:none;z-index:40;max-width:90vw;padding:8px 14px;border-radius:999px;background:rgba(40,20,10,.92);border:1px solid #ff9a3c;color:#ffd9b0;font-size:13px;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.4);transition:opacity .3s,transform .3s}
 #netNote.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){#netNote{transition:none}}
+.tawrap{position:relative}.tawrap textarea{padding-right:44px}
+.clr{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;border:1px solid #fff3;background:rgba(0,0,0,.35);color:#fff;font-size:14px;cursor:pointer;transition:transform .15s,background .15s}
+.clr:hover,.clr:focus-visible{background:rgba(255,255,255,.18)}.clr:active{transform:scale(.9)}.clr[hidden]{display:none}
