@@ -164,3 +164,5 @@ $('#newChat').onclick=()=>{if(hist.length&&!confirm('Start a new chat? This clea
 // Friendly hello that matches the time of day (morning / afternoon / evening)
 (()=>{const h=new Date().getHours(),g=h<5?'Hi, night owl! 🦉':h<12?'Good morning! ☀️':h<17?'Good afternoon! 🌤️':'Good evening! 🌙';
   const first=msgs.firstElementChild;if(first&&first.firstChild&&first.firstChild.nodeType===3)first.firstChild.textContent=first.firstChild.textContent.replace(/^Hi!/,g)})();
+// Studios: press Enter to Generate (Shift+Enter still makes a new line)
+[['#imgIn','#imgGo'],['#vidIn','#vidGo'],['#codeIn','#codeGo']].forEach(([i,b])=>{const t=$(i);if(t)t.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();$(b).click()}})});
