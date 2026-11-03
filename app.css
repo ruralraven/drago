@@ -100,3 +100,5 @@ nav .on{background:#ffffff16;color:#fff;box-shadow:inset 0 0 0 1px #7c5cff88}
 .msg .retry{margin-top:8px;padding:8px 14px;border:0;border-radius:999px;background:linear-gradient(135deg,#7c5cff,#ff5ca8);color:#fff;font:inherit;font-weight:700;cursor:pointer;min-height:40px}
 .msg .retry:active{transform:scale(.96)}
 .msg .retry:focus-visible{outline:3px solid #fff;outline-offset:2px}
+
+.msg.me .reuse{margin-left:8px;padding:2px 6px;font-size:.8em;border:0;border-radius:8px;background:rgba(255,255,255,.18);color:inherit;cursor:pointer;opacity:.75;vertical-align:middle;transition:opacity .2s,transform .2s}.msg.me .reuse:hover,.msg.me .reuse:focus-visible{opacity:1;transform:scale(1.1)}

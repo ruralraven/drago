@@ -107,7 +107,7 @@ async function ask(text,image){
 // Chat: when something goes wrong, a "🔁 Try again" button asks Drago the same thing again
 function addRetry(t,text,image){const b=document.createElement('button');b.type='button';b.className='retry';b.textContent='🔁 Try again';b.setAttribute('aria-label','Ask Drago the same thing again');
   b.onclick=()=>{t.remove();ask(text,image)};t.appendChild(document.createElement('br'));t.appendChild(b)}
-$('#chatF').onsubmit=e=>{e.preventDefault();const v=$('#chatIn').value.trim();if(!v)return;$('#chatIn').value='';add(msgs,esc(v),'me');hist.push({role:'user',content:v});ask(v)};
+$('#chatF').onsubmit=e=>{e.preventDefault();const v=$('#chatIn').value.trim();if(!v)return;$('#chatIn').value='';addReuse(add(msgs,esc(v),'me'),v);hist.push({role:'user',content:v});ask(v)};
 $('#pic').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{add(msgs,'<img src="'+rd.result+'">','me');hist.push({role:'user',content:'What is in this picture?'});ask('',rd.result)};rd.readAsDataURL(f);e.target.value=''};
 // studios
 function studio(btn,inp,out,path,render){$(btn).onclick=async()=>{const B=$(btn);if(B.disabled)return;const lbl=B.textContent;B.disabled=true;B.classList.add('busy');B.textContent='⏳ Working…';const p=$(inp).value.trim()||$(inp).placeholder;const o=$(out);o.innerHTML='';const t=add(o,typing+(path==='image'?' 🎨 Drawing… (can take ~20s)':path==='code'?' 💻 Writing code…':''),'bot');try{bubble=t;t.innerHTML=render(await api.call(path,{prompt:p,onTok:x=>{bubble=null;t.innerHTML=codeify(x)}}));bubble=null}catch(e){t.innerHTML=errText(e);t.classList.add('notice')}finally{B.disabled=false;B.classList.remove('busy');B.textContent=lbl}}}
@@ -204,3 +204,7 @@ document.addEventListener('click',()=>setTimeout(sync,60));setInterval(sync,800)
 (()=>{const c=$('#chips');if(!c)return;const POOL=['🦖 Tell me a dinosaur fact','😂 Tell me a joke','🎮 Give me a game idea','🧠 Quiz me on math','🚀 Tell me a space fact','🐉 Tell me a dragon story','🦈 Tell me an ocean fact','🎨 Give me a drawing idea','🧩 Give me a riddle','🌋 How do volcanoes work?','🤖 How do robots think?','⚡ Tell me a science fact'];
 const b=document.createElement('button');b.type='button';b.className='more';b.textContent='🔀 More ideas';b.setAttribute('aria-label','Show different ideas');c.appendChild(b);
 b.addEventListener('click',e=>{e.stopPropagation();const old=[...c.querySelectorAll('button:not(.more)')];const cur=old.map(x=>x.textContent);const pick=POOL.filter(p=>!cur.includes(p)).sort(()=>Math.random()-.5).slice(0,old.length);old.forEach((x,i)=>{if(pick[i])x.textContent=pick[i]})},true)})();
+
+// Chat: a small ✏️ button on your own messages puts that text back in the box so you can change it and ask again
+function addReuse(el,v){const b=document.createElement('button');b.type='button';b.className='reuse';b.textContent='✏️';b.title='Use this again';b.setAttribute('aria-label','Put this message back in the text box');
+  b.onclick=()=>{const i=$('#chatIn');i.value=v;i.dispatchEvent(new Event('input'));i.focus();try{i.setSelectionRange(v.length,v.length)}catch(_){}};el.appendChild(b)}
