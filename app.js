@@ -170,3 +170,6 @@ $('#newChat').onclick=()=>{if(hist.length&&!confirm('Start a new chat? This clea
 (()=>{const box=$('#msgs'),tab=$('#t-chat');if(!box||!tab)return;const b=document.createElement('button');b.type='button';b.id='toBottom';b.textContent='⬇ Newest';b.setAttribute('aria-label','Jump to the newest message');tab.appendChild(b);
   const check=()=>b.classList.toggle('show',box.scrollHeight-box.scrollTop-box.clientHeight>160);box.addEventListener('scroll',check,{passive:true});new MutationObserver(check).observe(box,{childList:true,subtree:true});
   b.onclick=()=>box.scrollTo({top:box.scrollHeight,behavior:'smooth'})})();
+// Offline banner: a small note at the top when the phone loses internet, hides again when it's back
+(()=>{const n=document.createElement('div');n.id='netNote';n.setAttribute('role','status');n.textContent='📶 No internet right now. Drago will try again when you’re back online.';document.body.appendChild(n);
+  const upd=()=>n.classList.toggle('show',!navigator.onLine);addEventListener('online',upd);addEventListener('offline',upd);upd()})();
