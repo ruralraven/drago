@@ -102,3 +102,6 @@ nav .on{background:#ffffff16;color:#fff;box-shadow:inset 0 0 0 1px #7c5cff88}
 .msg .retry:focus-visible{outline:3px solid #fff;outline-offset:2px}
 
 .msg.me .reuse{margin-left:8px;padding:2px 6px;font-size:.8em;border:0;border-radius:8px;background:rgba(255,255,255,.18);color:inherit;cursor:pointer;opacity:.75;vertical-align:middle;transition:opacity .2s,transform .2s}.msg.me .reuse:hover,.msg.me .reuse:focus-visible{opacity:1;transform:scale(1.1)}
+/* Chat: small time under each new message */
+.msg[data-time]::after{content:attr(data-time);display:block;margin-top:4px;font-size:10px;opacity:.5;letter-spacing:.02em}
+.msg.me[data-time]::after{text-align:right}

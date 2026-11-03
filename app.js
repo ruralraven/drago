@@ -208,3 +208,6 @@ b.addEventListener('click',e=>{e.stopPropagation();const old=[...c.querySelector
 // Chat: a small ✏️ button on your own messages puts that text back in the box so you can change it and ask again
 function addReuse(el,v){const b=document.createElement('button');b.type='button';b.className='reuse';b.textContent='✏️';b.title='Use this again';b.setAttribute('aria-label','Put this message back in the text box');
   b.onclick=()=>{const i=$('#chatIn');i.value=v;i.dispatchEvent(new Event('input'));i.focus();try{i.setSelectionRange(v.length,v.length)}catch(_){}};el.appendChild(b)}
+// Chat: each new message shows the time it was sent in small letters (like "1:05 PM")
+(()=>{const box=$('#msgs');if(!box)return;const stamp=d=>{if(d.nodeType===1&&d.classList.contains('msg')&&!d.dataset.time)d.dataset.time=new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})};
+new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(stamp))).observe(box,{childList:true})})();
