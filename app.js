@@ -211,3 +211,6 @@ function addReuse(el,v){const b=document.createElement('button');b.type='button'
 // Chat: each new message shows the time it was sent in small letters (like "1:05 PM")
 (()=>{const box=$('#msgs');if(!box)return;const stamp=d=>{if(d.nodeType===1&&d.classList.contains('msg')&&!d.dataset.time)d.dataset.time=new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})};
 new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(stamp))).observe(box,{childList:true})})();
+// Settings: tap the dark area outside the card, or press Escape, to close it
+(()=>{const s=$('#sheet');if(!s)return;s.addEventListener('click',e=>{if(e.target===s)s.classList.remove('on')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&s.classList.contains('on'))s.classList.remove('on')})})();
