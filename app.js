@@ -214,3 +214,7 @@ new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(stamp))).observe(box
 // Settings: tap the dark area outside the card, or press Escape, to close it
 (()=>{const s=$('#sheet');if(!s)return;s.addEventListener('click',e=>{if(e.target===s)s.classList.remove('on')});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&s.classList.contains('on'))s.classList.remove('on')})})();
+// Chat: a small ✖ button shows when you have typed something; tap it to empty the box
+(()=>{const i=$('#chatIn'),f=$('#chatF');if(!i||!f)return;const s=f.querySelector('.send');const b=document.createElement('button');b.type='button';b.className='icon clr';b.textContent='✖';b.title='Clear';b.setAttribute('aria-label','Clear what you typed');f.insertBefore(b,s);
+const sync=()=>b.classList.toggle('show',!!i.value);i.addEventListener('input',sync);f.addEventListener('submit',()=>setTimeout(sync,50));document.addEventListener('click',()=>setTimeout(sync,60));setInterval(sync,800);
+b.onclick=()=>{i.value='';i.dispatchEvent(new Event('input'));i.focus()};sync()})();
