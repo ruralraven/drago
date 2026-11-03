@@ -188,3 +188,7 @@ const b=document.createElement('button');b.type='button';b.className='clr';b.tex
 const sync=()=>{b.hidden=!t.value};sync();t.addEventListener('input',sync);
 ['#imgDice','#vidDice','#codeDice'].forEach(d=>{const x=$(d);if(x)x.addEventListener('click',()=>setTimeout(sync))});
 b.onclick=()=>{t.value='';try{localStorage.removeItem('drago-draft-'+s.slice(1))}catch(e){}sync();t.focus()}});
+// Chat: the ➤ Send button glows when there is something to send, and looks dim when the box is empty
+(()=>{const i=$('#chatIn'),f=$('#chatF');if(!i||!f)return;const s=f.querySelector('.send');if(!s)return;
+const sync=()=>s.classList.toggle('ready',!!i.value.trim());i.addEventListener('input',sync);f.addEventListener('submit',()=>setTimeout(sync,50));
+document.addEventListener('click',()=>setTimeout(sync,60));setInterval(sync,800);sync()})();
