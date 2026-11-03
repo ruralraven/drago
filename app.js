@@ -173,3 +173,8 @@ $('#newChat').onclick=()=>{if(hist.length&&!confirm('Start a new chat? This clea
 // Offline banner: a small note at the top when the phone loses internet, hides again when it's back
 (()=>{const n=document.createElement('div');n.id='netNote';n.setAttribute('role','status');n.textContent='📶 No internet right now. Drago will try again when you’re back online.';document.body.appendChild(n);
   const upd=()=>n.classList.toggle('show',!navigator.onLine);addEventListener('online',upd);addEventListener('offline',upd);upd()})();
+// Tabs: Drago remembers which tab you used last (opening with ?listen always starts on Chat)
+(()=>{const btns=[...document.querySelectorAll('nav button')];const mark=()=>btns.forEach(x=>x.setAttribute('aria-current',x.classList.contains('on')?'page':'false'));
+  btns.forEach(b=>b.addEventListener('click',()=>{try{localStorage.setItem('drago.tab',b.dataset.t)}catch(_){}mark()}));
+  let t=null;try{t=localStorage.getItem('drago.tab')}catch(_){}
+  if(t&&t!=='chat'&&!location.search.includes('listen')){const b=btns.find(x=>x.dataset.t===t);if(b&&document.getElementById('t-'+t))b.click()}mark()})();
