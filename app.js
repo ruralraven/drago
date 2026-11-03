@@ -102,8 +102,11 @@ const msgs=$('#msgs'),hist=[];
 async function ask(text,image){
   const t=add(msgs,typing,'bot');
   try{bubble=t;const r=await api.call('chat',{messages:hist.slice(),image,onTok:x=>{bubble=null;t.innerHTML=codeify(x);msgs.scrollTop=msgs.scrollHeight}});bubble=null;t.innerHTML=codeify(r.reply||'');addSpeak(t);hist.push({role:'assistant',content:r.reply})}
-  catch(e){t.innerHTML=errText(e);t.classList.add('notice')}
+  catch(e){t.innerHTML=errText(e);t.classList.add('notice');addRetry(t,text,image)}
 }
+// Chat: when something goes wrong, a "🔁 Try again" button asks Drago the same thing again
+function addRetry(t,text,image){const b=document.createElement('button');b.type='button';b.className='retry';b.textContent='🔁 Try again';b.setAttribute('aria-label','Ask Drago the same thing again');
+  b.onclick=()=>{t.remove();ask(text,image)};t.appendChild(document.createElement('br'));t.appendChild(b)}
 $('#chatF').onsubmit=e=>{e.preventDefault();const v=$('#chatIn').value.trim();if(!v)return;$('#chatIn').value='';add(msgs,esc(v),'me');hist.push({role:'user',content:v});ask(v)};
 $('#pic').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{add(msgs,'<img src="'+rd.result+'">','me');hist.push({role:'user',content:'What is in this picture?'});ask('',rd.result)};rd.readAsDataURL(f);e.target.value=''};
 // studios
