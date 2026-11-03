@@ -178,3 +178,7 @@ $('#newChat').onclick=()=>{if(hist.length&&!confirm('Start a new chat? This clea
   btns.forEach(b=>b.addEventListener('click',()=>{try{localStorage.setItem('drago.tab',b.dataset.t)}catch(_){}mark()}));
   let t=null;try{t=localStorage.getItem('drago.tab')}catch(_){}
   if(t&&t!=='chat'&&!location.search.includes('listen')){const b=btns.find(x=>x.dataset.t===t);if(b&&document.getElementById('t-'+t))b.click()}mark()})();
+// Studios remember what you were typing (saved on this device), cleared after Generate
+['#imgIn','#vidIn','#codeIn'].forEach(s=>{const t=$(s);if(!t)return;const k='drago-draft-'+s.slice(1);try{const v=localStorage.getItem(k);if(v&&!t.value)t.value=v}catch(e){}
+t.addEventListener('input',()=>{try{t.value.trim()?localStorage.setItem(k,t.value):localStorage.removeItem(k)}catch(e){}})});
+['#imgGo','#vidGo','#codeGo'].forEach(b=>{const x=$(b);if(x)x.addEventListener('click',()=>{try{localStorage.removeItem('drago-draft-'+b.slice(1,-2)+'In')}catch(e){}})});
