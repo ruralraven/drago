@@ -166,3 +166,7 @@ $('#newChat').onclick=()=>{if(hist.length&&!confirm('Start a new chat? This clea
   const first=msgs.firstElementChild;if(first&&first.firstChild&&first.firstChild.nodeType===3)first.firstChild.textContent=first.firstChild.textContent.replace(/^Hi!/,g)})();
 // Studios: press Enter to Generate (Shift+Enter still makes a new line)
 [['#imgIn','#imgGo'],['#vidIn','#vidGo'],['#codeIn','#codeGo']].forEach(([i,b])=>{const t=$(i);if(t)t.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();$(b).click()}})});
+// Chat: "Newest" button shows when you scroll up, tap it to jump back down
+(()=>{const box=$('#msgs'),tab=$('#t-chat');if(!box||!tab)return;const b=document.createElement('button');b.type='button';b.id='toBottom';b.textContent='⬇ Newest';b.setAttribute('aria-label','Jump to the newest message');tab.appendChild(b);
+  const check=()=>b.classList.toggle('show',box.scrollHeight-box.scrollTop-box.clientHeight>160);box.addEventListener('scroll',check,{passive:true});new MutationObserver(check).observe(box,{childList:true,subtree:true});
+  b.onclick=()=>box.scrollTo({top:box.scrollHeight,behavior:'smooth'})})();
