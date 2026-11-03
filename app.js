@@ -51,7 +51,7 @@ const api={
       if(!r.ok) throw new Error('HTTP '+r.status); return await r.json();
     }catch(e){console.warn('custom server failed, using free AI',e)}}
     if(path==='chat'){if(body.image)throw new Error('novision');return{reply:await brain(KID,body.messages.slice(-8),body.onTok)}}
-    if(path==='code')return{reply:await brain(CODER,[{role:'user',content:body.prompt}],body.onTok)};
+    if(path==='code')return{reply:await brain(CODER,[{role:'user',content:body.prompt+(codeKind?' '+codeKind:'')}],body.onTok)};
     if(path==='image')return freeImage(body.prompt+(imgStyle?', '+imgStyle:''));
     if(path==='video')throw new Error('novideo');
     throw new Error('nc');
@@ -132,6 +132,11 @@ $('#vidOut').addEventListener('click',e=>{if(e.target.closest('.again'))$('#vidG
 // Code Lab: "Surprise me" fills in a random fun coding idea
 const CIDEAS=['Make a button that changes color when I click it','Make a dice roller that shows a random number from 1 to 6','Make a star that follows my mouse','Make a simple clicker game with a score','Make a page with a bouncing ball','Make a rainbow text that keeps changing colors','Make a quiz with 3 math questions','Make a stopwatch with start and stop buttons','Make a dragon emoji that jumps when I press space'];
 $('#codeDice').onclick=()=>{const cur=$('#codeIn').value;let n;do{n=CIDEAS[Math.floor(Math.random()*CIDEAS.length)]}while(n===cur);$('#codeIn').value=n;$('#codeIn').focus()};
+// Code Lab: kind chips (Any, Web page, Game, Python); remembers your pick
+let codeKind=localStorage.getItem('drago.codeKind')||'';
+const kindBox=$('#codeKind');
+function showKind(){kindBox&&kindBox.querySelectorAll('button').forEach(b=>{const on=b.dataset.k===codeKind;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)})}
+if(kindBox){kindBox.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;codeKind=b.dataset.k;localStorage.setItem('drago.codeKind',codeKind);showKind()});showKind()}
 studio('#codeGo','#codeIn','#codeOut','code',r=>codeify(r.reply||''));
 // settings
 $('#setBtn').onclick=()=>{$('#apiUrl').value=api.url;$('#sheet').classList.add('on')};
