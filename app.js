@@ -192,3 +192,7 @@ b.onclick=()=>{t.value='';try{localStorage.removeItem('drago-draft-'+s.slice(1))
 (()=>{const i=$('#chatIn'),f=$('#chatF');if(!i||!f)return;const s=f.querySelector('.send');if(!s)return;
 const sync=()=>s.classList.toggle('ready',!!i.value.trim());i.addEventListener('input',sync);f.addEventListener('submit',()=>setTimeout(sync,50));
 document.addEventListener('click',()=>setTimeout(sync,60));setInterval(sync,800);sync()})();
+// Chat: "🔀 More ideas" swaps the idea chips for new ones
+(()=>{const c=$('#chips');if(!c)return;const POOL=['🦖 Tell me a dinosaur fact','😂 Tell me a joke','🎮 Give me a game idea','🧠 Quiz me on math','🚀 Tell me a space fact','🐉 Tell me a dragon story','🦈 Tell me an ocean fact','🎨 Give me a drawing idea','🧩 Give me a riddle','🌋 How do volcanoes work?','🤖 How do robots think?','⚡ Tell me a science fact'];
+const b=document.createElement('button');b.type='button';b.className='more';b.textContent='🔀 More ideas';b.setAttribute('aria-label','Show different ideas');c.appendChild(b);
+b.addEventListener('click',e=>{e.stopPropagation();const old=[...c.querySelectorAll('button:not(.more)')];const cur=old.map(x=>x.textContent);const pick=POOL.filter(p=>!cur.includes(p)).sort(()=>Math.random()-.5).slice(0,old.length);old.forEach((x,i)=>{if(pick[i])x.textContent=pick[i]})},true)})();
