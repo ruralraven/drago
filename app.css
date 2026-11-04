@@ -123,3 +123,6 @@ header{position:relative}.rawr{position:absolute;left:52px;top:100%;margin-top:4
 nav i.bnc{animation:navBounce .45s cubic-bezier(.3,1.6,.5,1)}
 @keyframes navBounce{0%{transform:scale(1)}40%{transform:scale(1.35) translateY(-4px)}70%{transform:scale(.92)}100%{transform:scale(1)}}
 @media (prefers-reduced-motion:reduce){nav i.bnc{animation:none}}
+
+/* Settings: chat text size (small / medium / big) */
+.msgs .msg{font-size:var(--msgfs,16px)}.tsl{margin:6px 0 6px}.tsize{display:flex;gap:8px;margin-bottom:16px}.tsize button{flex:1;height:46px;border-radius:14px;border:1px solid #ffffff22;background:#ffffff0d;color:#fff;font-weight:700;cursor:pointer;transition:background .2s,transform .1s}.tsize button:active{transform:scale(.96)}.tsize button[aria-pressed="true"]{background:var(--g);border-color:transparent;box-shadow:0 4px 18px #7c5cff55}

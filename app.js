@@ -243,3 +243,9 @@ const now=Date.now();if(m===lm&&now-lt<350){toggle(m);lm=null;lt=0;e.preventDefa
 // little bounce on the tab icon when you tap a tab
 document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{const i=b.querySelector('i');if(!i)return;i.classList.remove('bnc');void i.offsetWidth;i.classList.add('bnc')}));
 document.querySelectorAll('nav i').forEach(i=>i.addEventListener('animationend',()=>i.classList.remove('bnc')));
+
+// Settings: pick the chat text size (small / medium / big); Drago remembers it on this device
+(()=>{const sizes={s:'14px',m:'16px',l:'20px'},box=document.getElementById('tsize');if(!box)return;
+  const apply=k=>{if(!sizes[k])k='m';document.documentElement.style.setProperty('--msgfs',sizes[k]);box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.s===k)))};
+  let saved='m';try{saved=localStorage.getItem('drago-text-size')||'m'}catch(_){}apply(saved);
+  box.addEventListener('click',e=>{const b=e.target.closest('button[data-s]');if(!b)return;apply(b.dataset.s);try{localStorage.setItem('drago-text-size',b.dataset.s)}catch(_){}})})();
