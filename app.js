@@ -89,7 +89,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('.speak');if(!b)r
   if(b.classList.contains('live')){ss.cancel();return}
   ss.cancel();document.querySelectorAll('.speak.live').forEach(x=>{x.classList.remove('live');x.textContent='🔊 Read aloud'});
   const txt=[...b.parentNode.childNodes].filter(n=>n!==b&&!(n.nodeName==='PRE')&&!(n.nodeName==='BUTTON')).map(n=>n.textContent).join(' ').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\uFE0F]/gu,'').trim();
-  if(!txt)return;const u=new SpeechSynthesisUtterance(txt);u.lang='en-US';u.rate=1;
+  if(!txt)return;const u=new SpeechSynthesisUtterance(txt);u.lang='en-US';u.rate=talkRate();
   const done=()=>{b.classList.remove('live');b.textContent='🔊 Read aloud'};u.onend=done;u.onerror=done;
   b.classList.add('live');b.textContent='⏹ Stop';ss.speak(u)});
 // splash
@@ -270,4 +270,12 @@ function autoTalk(el){try{if(localStorage.getItem('drago-auto-talk')!=='on')retu
   const apply=k=>box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.a===k)));
   let saved='off';try{saved=localStorage.getItem('drago-auto-talk')||'off'}catch(_){}apply(saved);
   box.addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(!b)return;const k=b.dataset.a;apply(k);try{localStorage.setItem('drago-auto-talk',k)}catch(_){}
-    const ss=window.speechSynthesis;ss.cancel();if(k==='on'){const u=new SpeechSynthesisUtterance('Okay! I will read my answers out loud.');u.rate=1;ss.speak(u)}})})();
+    const ss=window.speechSynthesis;ss.cancel();if(k==='on'){const u=new SpeechSynthesisUtterance('Okay! I will read my answers out loud.');u.rate=talkRate();ss.speak(u)}})})();
+
+// Settings: "Talking speed" — Slow / Normal / Fast for Read aloud (remembered on device)
+function talkRate(){let r=1;try{r=parseFloat(localStorage.getItem('drago-talk-rate'))||1}catch(_){}return Math.min(1.5,Math.max(0.6,r))}
+(()=>{const box=document.getElementById('talkSpeed');if(!box)return;
+  if(!('speechSynthesis' in window)){box.previousElementSibling.hidden=true;box.hidden=true;return}
+  const apply=r=>box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(parseFloat(b.dataset.r)===r)));apply(talkRate());
+  box.addEventListener('click',e=>{const b=e.target.closest('button[data-r]');if(!b)return;const r=parseFloat(b.dataset.r);apply(r);try{localStorage.setItem('drago-talk-rate',String(r))}catch(_){}
+    const ss=window.speechSynthesis;ss.cancel();const u=new SpeechSynthesisUtterance(r<1?'I will talk slowly.':r>1?'I will talk fast!':'I will talk at normal speed.');u.lang='en-US';u.rate=r;ss.speak(u)})})();
