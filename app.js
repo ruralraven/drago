@@ -82,9 +82,12 @@ document.addEventListener('click',e=>{const b=e.target.closest('.save');if(!b)re
 // read-aloud button on Drago's chat replies (browser voice, no key needed)
 function addSpeak(el){addCopy(el);if(!('speechSynthesis' in window))return;const b=document.createElement('button');b.type='button';b.className='speak';b.textContent='🔊 Read aloud';b.setAttribute('aria-label','Read this answer out loud');el.appendChild(b)}
 // Chat: "Copy answer" button copies Drago's reply text
-function addCopy(el){el.appendChild(document.createElement('br'));const b=document.createElement('button');b.type='button';b.className='copyans';b.textContent='📋 Copy';b.setAttribute('aria-label','Copy this answer');el.appendChild(b)}
+function addCopy(el){el.appendChild(document.createElement('br'));const b=document.createElement('button');b.type='button';b.className='copyans';b.textContent='📋 Copy';b.setAttribute('aria-label','Copy this answer');el.appendChild(b);if(navigator.share){const sh=document.createElement('button');sh.type='button';sh.className='shareans';sh.textContent='📤 Share';sh.setAttribute('aria-label','Share this answer');el.appendChild(sh)}}
 document.addEventListener('click',async e=>{const b=e.target.closest('.copyans');if(!b)return;const txt=[...b.parentNode.childNodes].filter(n=>!(n.nodeType===1&&n.matches('button,.speak,.copyans'))).map(n=>n.textContent).join(' ').replace(/\s+/g,' ').trim();
   try{await navigator.clipboard.writeText(txt);b.textContent='Copied ✓'}catch(_){b.textContent='Could not copy'}setTimeout(()=>b.textContent='📋 Copy',1500)});
+// Chat: "Share" button sends Drago's answer to Messages, Notes, etc. (only where the phone supports sharing)
+document.addEventListener('click',async e=>{const b=e.target.closest('.shareans');if(!b)return;const txt=[...b.parentNode.childNodes].filter(n=>!(n.nodeType===1&&n.matches('button'))).map(n=>n.textContent).join(' ').replace(/\s+/g,' ').trim();if(!txt)return;
+  try{await navigator.share({title:'Drago says',text:'🐉 Drago says: '+txt});b.textContent='Shared ✓';setTimeout(()=>b.textContent='📤 Share',1500)}catch(_){}});
 document.addEventListener('click',e=>{const b=e.target.closest('.speak');if(!b)return;const ss=window.speechSynthesis;
   if(b.classList.contains('live')){ss.cancel();return}
   ss.cancel();document.querySelectorAll('.speak.live').forEach(x=>{x.classList.remove('live');x.textContent='🔊 Read aloud'});
