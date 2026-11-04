@@ -218,3 +218,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&s.classList.contain
 (()=>{const i=$('#chatIn'),f=$('#chatF');if(!i||!f)return;const s=f.querySelector('.send');const b=document.createElement('button');b.type='button';b.className='icon chatclr';b.textContent='✖';b.title='Clear';b.setAttribute('aria-label','Clear what you typed');f.insertBefore(b,s);
 const sync=()=>b.classList.toggle('show',!!i.value);i.addEventListener('input',sync);f.addEventListener('submit',()=>setTimeout(sync,50));document.addEventListener('click',()=>setTimeout(sync,60));setInterval(sync,800);
 b.onclick=()=>{i.value='';i.dispatchEvent(new Event('input'));i.focus()};sync()})();
+// Chat: Drago remembers what you were typing if you close the app, and puts it back next time (saved on this device)
+(()=>{const i=$('#chatIn'),f=$('#chatF');if(!i||!f)return;const k='drago-draft-chat';
+try{const v=localStorage.getItem(k);if(v&&!i.value&&!location.search.includes('listen')){i.value=v;i.dispatchEvent(new Event('input'))}}catch(_){}
+let last=i.value;const save=()=>{if(i.value===last)return;last=i.value;try{i.value.trim()?localStorage.setItem(k,i.value):localStorage.removeItem(k)}catch(_){}};
+i.addEventListener('input',save);f.addEventListener('submit',()=>setTimeout(save,0));setInterval(save,1000);addEventListener('pagehide',save)})();
