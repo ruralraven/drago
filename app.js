@@ -223,3 +223,6 @@ b.onclick=()=>{i.value='';i.dispatchEvent(new Event('input'));i.focus()};sync()}
 try{const v=localStorage.getItem(k);if(v&&!i.value&&!location.search.includes('listen')){i.value=v;i.dispatchEvent(new Event('input'))}}catch(_){}
 let last=i.value;const save=()=>{if(i.value===last)return;last=i.value;try{i.value.trim()?localStorage.setItem(k,i.value):localStorage.removeItem(k)}catch(_){}};
 i.addEventListener('input',save);f.addEventListener('submit',()=>setTimeout(save,0));setInterval(save,1000);addEventListener('pagehide',save)})();
+// Chat: the empty text box shows a new example question every few seconds, to give ideas
+(()=>{const i=$('#chatIn');if(!i)return;const P=['Ask Drago anything…','Try: How far away is the Moon?','Try: Tell me a funny joke','Try: Help me name my dragon','Try: How do volcanoes work?','Try: Give me a game idea','Try: What is 12 × 12?'];let n=0;
+setInterval(()=>{if(i.value||document.activeElement===i||document.hidden)return;n=(n+1)%P.length;i.placeholder=P[n]},4000);i.addEventListener('blur',()=>{if(!i.value){n=0;i.placeholder=P[0]}})})();
