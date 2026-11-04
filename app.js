@@ -104,7 +104,7 @@ document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.query
 const msgs=$('#msgs'),hist=[];
 async function ask(text,image){
   const t=add(msgs,typing+'<span class="think" aria-live="polite">Drago is thinking…</span>','bot');
-  try{bubble=t;const r=await api.call('chat',{messages:hist.slice(),image,onTok:x=>{bubble=null;t.innerHTML=codeify(x);msgs.scrollTop=msgs.scrollHeight}});bubble=null;t.innerHTML=codeify(r.reply||'');addSpeak(t);autoTalk(t);hist.push({role:'assistant',content:r.reply})}
+  try{bubble=t;const r=await api.call('chat',{messages:hist.slice(),image,onTok:x=>{bubble=null;t.innerHTML=codeify(x);msgs.scrollTop=msgs.scrollHeight}});bubble=null;t.innerHTML=codeify(r.reply||'');addSpeak(t);autoTalk(t);hist.push({role:'assistant',content:r.reply});try{localStorage.setItem('drago-asked',(+localStorage.getItem('drago-asked')||0)+1)}catch(_){}}
   catch(e){t.innerHTML=errText(e);t.classList.add('notice');addRetry(t,text,image)}
 }
 // Chat: when something goes wrong, a "🔁 Try again" button asks Drago the same thing again
@@ -285,3 +285,7 @@ function talkRate(){let r=1;try{r=parseFloat(localStorage.getItem('drago-talk-ra
   const apply=r=>box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(parseFloat(b.dataset.r)===r)));apply(talkRate());
   box.addEventListener('click',e=>{const b=e.target.closest('button[data-r]');if(!b)return;const r=parseFloat(b.dataset.r);apply(r);try{localStorage.setItem('drago-talk-rate',String(r))}catch(_){}
     const ss=window.speechSynthesis;ss.cancel();const u=new SpeechSynthesisUtterance(r<1?'I will talk slowly.':r>1?'I will talk fast!':'I will talk at normal speed.');u.lang='en-US';u.rate=r;ss.speak(u)})})();
+// Settings: a small trophy line shows how many questions Drago has answered for you (counted on this device)
+(()=>{const c=document.querySelector('#sheet .card'),h=c&&c.querySelector('h2');if(!h)return;const p=document.createElement('p');p.className='asked';p.setAttribute('aria-live','polite');h.after(p);
+const show=()=>{let n=0;try{n=+localStorage.getItem('drago-asked')||0}catch(_){}p.textContent=n?'🏆 Drago has answered '+n+(n===1?' question':' questions')+' for you!':'🏆 Ask Drago a question to start your count!'};
+show();$('#setBtn').addEventListener('click',show)})();
