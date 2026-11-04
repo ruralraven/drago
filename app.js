@@ -256,3 +256,9 @@ document.querySelectorAll('nav i').forEach(i=>i.addEventListener('animationend',
   const apply=k=>{if(!sizes[k])k='m';document.documentElement.style.setProperty('--msgfs',sizes[k]);box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.s===k)))};
   let saved='m';try{saved=localStorage.getItem('drago-text-size')||'m'}catch(_){}apply(saved);
   box.addEventListener('click',e=>{const b=e.target.closest('button[data-s]');if(!b)return;apply(b.dataset.s);try{localStorage.setItem('drago-text-size',b.dataset.s)}catch(_){}})})();
+
+// Settings: pick Drago's colors (changes the gradient on buttons and titles), remembered on device
+(()=>{const G={sun:'linear-gradient(135deg,#ff7a18,#ff2e63 55%,#7c5cff)',sea:'linear-gradient(135deg,#22d3ee,#3b82f6 55%,#6366f1)',leaf:'linear-gradient(135deg,#a3e635,#22c55e 55%,#0d9488)',candy:'linear-gradient(135deg,#f9a8d4,#ec4899 55%,#a855f7)'},box=document.getElementById('theme');if(!box)return;
+  const apply=c=>{if(!G[c])c='sun';document.documentElement.style.setProperty('--g',G[c]);box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.c===c?'true':'false'))};
+  let saved='sun';try{saved=localStorage.getItem('drago-theme')||'sun'}catch(_){}apply(saved);
+  box.addEventListener('click',e=>{const b=e.target.closest('button[data-c]');if(!b)return;apply(b.dataset.c);try{localStorage.setItem('drago-theme',b.dataset.c)}catch(_){}})})();
