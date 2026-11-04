@@ -100,7 +100,7 @@ document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.query
 // chat
 const msgs=$('#msgs'),hist=[];
 async function ask(text,image){
-  const t=add(msgs,typing,'bot');
+  const t=add(msgs,typing+'<span class="think" aria-live="polite">Drago is thinking…</span>','bot');
   try{bubble=t;const r=await api.call('chat',{messages:hist.slice(),image,onTok:x=>{bubble=null;t.innerHTML=codeify(x);msgs.scrollTop=msgs.scrollHeight}});bubble=null;t.innerHTML=codeify(r.reply||'');addSpeak(t);hist.push({role:'assistant',content:r.reply})}
   catch(e){t.innerHTML=errText(e);t.classList.add('notice');addRetry(t,text,image)}
 }
@@ -231,3 +231,6 @@ setInterval(()=>{if(i.value||document.activeElement===i||document.hidden)return;
 const toggle=m=>{let h=m.querySelector(':scope > .heart');if(h){h.remove();return}h=document.createElement('span');h.className='heart';h.textContent='❤️';h.setAttribute('aria-label','You liked this');m.appendChild(h)};
 box.addEventListener('pointerup',e=>{if(e.target.closest('button,a,pre,input,textarea'))return;const m=e.target.closest('.msg.bot');if(!m||m.classList.contains('notice')){lm=null;return}
 const now=Date.now();if(m===lm&&now-lt<350){toggle(m);lm=null;lt=0;e.preventDefault()}else{lm=m;lt=now}})})();
+// Chat: while Drago works on an answer, a small friendly message changes every 2 seconds
+(()=>{const L=['Drago is thinking…','🐉 Flapping her wings…','📚 Looking through her books…','✨ Putting the words together…','Almost there…'];
+  setInterval(()=>document.querySelectorAll('.msg .think').forEach(el=>{const i=(+el.dataset.i||0)+1;el.dataset.i=i;el.classList.remove('swap');void el.offsetWidth;el.textContent=L[i%L.length];el.classList.add('swap')}),2000)})();
