@@ -226,3 +226,8 @@ i.addEventListener('input',save);f.addEventListener('submit',()=>setTimeout(save
 // Chat: the empty text box shows a new example question every few seconds, to give ideas
 (()=>{const i=$('#chatIn');if(!i)return;const P=['Ask Drago anything…','Try: How far away is the Moon?','Try: Tell me a funny joke','Try: Help me name my dragon','Try: How do volcanoes work?','Try: Give me a game idea','Try: What is 12 × 12?'];let n=0;
 setInterval(()=>{if(i.value||document.activeElement===i||document.hidden)return;n=(n+1)%P.length;i.placeholder=P[n]},4000);i.addEventListener('blur',()=>{if(!i.value){n=0;i.placeholder=P[0]}})})();
+// Chat: double-tap one of Drago's answers to give it a ❤️ (double-tap again to take it away)
+(()=>{const box=$('#msgs');if(!box)return;let lt=0,lm=null;
+const toggle=m=>{let h=m.querySelector(':scope > .heart');if(h){h.remove();return}h=document.createElement('span');h.className='heart';h.textContent='❤️';h.setAttribute('aria-label','You liked this');m.appendChild(h)};
+box.addEventListener('pointerup',e=>{if(e.target.closest('button,a,pre,input,textarea'))return;const m=e.target.closest('.msg.bot');if(!m||m.classList.contains('notice')){lm=null;return}
+const now=Date.now();if(m===lm&&now-lt<350){toggle(m);lm=null;lt=0;e.preventDefault()}else{lm=m;lt=now}})})();
