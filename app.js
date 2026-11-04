@@ -234,3 +234,9 @@ const now=Date.now();if(m===lm&&now-lt<350){toggle(m);lm=null;lt=0;e.preventDefa
 // Chat: while Drago works on an answer, a small friendly message changes every 2 seconds
 (()=>{const L=['Drago is thinking…','🐉 Flapping her wings…','📚 Looking through her books…','✨ Putting the words together…','Almost there…'];
   setInterval(()=>document.querySelectorAll('.msg .think').forEach(el=>{const i=(+el.dataset.i||0)+1;el.dataset.i=i;el.classList.remove('swap');void el.offsetWidth;el.textContent=L[i%L.length];el.classList.add('swap')}),2000)})();
+// Header: tap Drago's dragon logo and she does a happy spin and says something friendly.
+(()=>{const l=document.querySelector('.hlogo');if(!l)return;const W=['Rawr! 🐉','Hi Jackson! 👋','That tickles! 😄','🔥 Dragon power!','✨ Ready to help!'];let n=0,t;
+  l.setAttribute('role','button');l.tabIndex=0;l.setAttribute('aria-label','Tap Drago');
+  const b=document.createElement('span');b.className='rawr';b.setAttribute('aria-live','polite');l.insertAdjacentElement('afterend',b);
+  const go=()=>{l.classList.remove('spin');void l.offsetWidth;l.classList.add('spin');b.textContent=W[n++%W.length];b.classList.add('show');clearTimeout(t);t=setTimeout(()=>b.classList.remove('show'),1600)};
+  l.addEventListener('click',go);l.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})})();
