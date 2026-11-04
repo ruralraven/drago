@@ -240,3 +240,6 @@ const now=Date.now();if(m===lm&&now-lt<350){toggle(m);lm=null;lt=0;e.preventDefa
   const b=document.createElement('span');b.className='rawr';b.setAttribute('aria-live','polite');l.insertAdjacentElement('afterend',b);
   const go=()=>{l.classList.remove('spin');void l.offsetWidth;l.classList.add('spin');b.textContent=W[n++%W.length];b.classList.add('show');clearTimeout(t);t=setTimeout(()=>b.classList.remove('show'),1600)};
   l.addEventListener('click',go);l.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})})();
+// little bounce on the tab icon when you tap a tab
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{const i=b.querySelector('i');if(!i)return;i.classList.remove('bnc');void i.offsetWidth;i.classList.add('bnc')}));
+document.querySelectorAll('nav i').forEach(i=>i.addEventListener('animationend',()=>i.classList.remove('bnc')));

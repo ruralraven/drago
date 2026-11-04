@@ -120,3 +120,6 @@ nav .on{background:#ffffff16;color:#fff;box-shadow:inset 0 0 0 1px #7c5cff88}
 @keyframes dspin{0%{transform:rotate(0) scale(1)}50%{transform:rotate(200deg) scale(1.25)}100%{transform:rotate(360deg) scale(1)}}
 header{position:relative}.rawr{position:absolute;left:52px;top:100%;margin-top:4px;z-index:5;padding:6px 11px;border-radius:12px;background:var(--g);color:#fff;font-size:14px;font-weight:700;white-space:nowrap;opacity:0;transform:translateY(-6px) scale(.9);transition:opacity .2s,transform .2s;pointer-events:none;box-shadow:0 6px 18px #0006}.rawr.show{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.hlogo.spin{animation:none}}
+nav i.bnc{animation:navBounce .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes navBounce{0%{transform:scale(1)}40%{transform:scale(1.35) translateY(-4px)}70%{transform:scale(.92)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){nav i.bnc{animation:none}}
