@@ -24,7 +24,7 @@ async function freeText(sys,messages){
   throw last;
 }
 function freeImage(prompt){return new Promise((ok,no)=>{
-  const u='https://image.pollinations.ai/prompt/'+encodeURIComponent(prompt+', kid friendly, cartoon style')+'?safe=true&nologo=true&width=768&height=768&seed='+Math.floor(Math.random()*1e6);
+  const u='https://image.pollinations.ai/prompt/'+encodeURIComponent(prompt+', kid friendly, cartoon style')+'?safe=true&nologo=true&width='+imgW()+'&height='+imgH()+'&seed='+Math.floor(Math.random()*1e6);
   const im=new Image();const tm=setTimeout(()=>no(new Error('slow')),120000);
   im.onload=()=>{clearTimeout(tm);ok({url:u})};im.onerror=()=>{clearTimeout(tm);no(new Error('img'))};im.src=u;})}
 // Answer order: online free AI (fast, light on the phone) -> on-device AI (if online fails) -> friendly error.
@@ -117,6 +117,13 @@ const styleBox=$('#imgStyle');
 function showStyle(){styleBox&&styleBox.querySelectorAll('button').forEach(b=>{const on=b.dataset.s===imgStyle;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)})}
 if(styleBox){styleBox.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;imgStyle=b.dataset.s;localStorage.setItem('drago.imgStyle',imgStyle);showStyle()});showStyle()}
 studio('#imgGo','#imgIn','#imgOut','image',r=>'<img src="'+esc(r.url)+'" alt="Picture Drago made" style="width:100%;border-radius:14px"><div class="imgacts"><button type="button" class="again">🔁 Make another</button><button type="button" class="savepic" data-u="'+esc(r.url)+'" aria-label="Save this picture">⬇ Save picture</button><a class="open" href="'+esc(r.url)+'" target="_blank" rel="noopener">🔍 Full size</a></div>');
+// Image Studio: shape chips (Square, Wide, Tall); remembers your pick
+let imgShape=localStorage.getItem('drago.imgShape')||'sq';
+const SHAPES={sq:[768,768],wide:[1024,576],tall:[576,1024]};
+function imgW(){return(SHAPES[imgShape]||SHAPES.sq)[0]}function imgH(){return(SHAPES[imgShape]||SHAPES.sq)[1]}
+const shapeBox=$('#imgShape');
+function showShape(){shapeBox&&shapeBox.querySelectorAll('button').forEach(b=>{const on=b.dataset.p===imgShape;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)})}
+if(shapeBox){shapeBox.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;imgShape=b.dataset.p;localStorage.setItem('drago.imgShape',imgShape);showShape()});showShape()}
 // Image Studio: "Surprise me" fills in a random fun picture idea
 const IDEAS=['A dragon baking cupcakes in a cozy kitchen','A robot surfing a giant wave at sunset','A castle made of candy on a cloud','An astronaut cat floating past Saturn','A neon cube racing through a city at night','A friendly octopus playing drums under the sea','A treehouse city in a glowing forest','A penguin knight riding a polar bear','A volcano that erupts rainbow sprinkles','A tiny dragon sleeping in a teacup'];
 $('#imgDice').onclick=()=>{const cur=$('#imgIn').value;let n;do{n=IDEAS[Math.floor(Math.random()*IDEAS.length)]}while(n===cur);$('#imgIn').value=n;$('#imgIn').focus()};
