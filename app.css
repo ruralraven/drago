@@ -130,3 +130,4 @@ nav i.bnc{animation:navBounce .45s cubic-bezier(.3,1.6,.5,1)}
 .shapes button{display:inline-flex;align-items:center;gap:7px}.shp{display:inline-block;border:2px solid currentColor;border-radius:3px;opacity:.9}.shp.sq{width:13px;height:13px}.shp.wide{width:18px;height:11px}.shp.tall{width:11px;height:17px}
 
 .themes button{display:flex;align-items:center;justify-content:center}.themes i{display:block;width:30px;height:30px;border-radius:50%;box-shadow:0 0 0 2px #ffffff33}.themes button[aria-pressed="true"]{background:#ffffff26;border-color:#fff}.themes button[aria-pressed="true"] i{box-shadow:0 0 0 3px #fff}
+.tsize[hidden],.tsl[hidden]{display:none}

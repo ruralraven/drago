@@ -101,7 +101,7 @@ document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.query
 const msgs=$('#msgs'),hist=[];
 async function ask(text,image){
   const t=add(msgs,typing+'<span class="think" aria-live="polite">Drago is thinking…</span>','bot');
-  try{bubble=t;const r=await api.call('chat',{messages:hist.slice(),image,onTok:x=>{bubble=null;t.innerHTML=codeify(x);msgs.scrollTop=msgs.scrollHeight}});bubble=null;t.innerHTML=codeify(r.reply||'');addSpeak(t);hist.push({role:'assistant',content:r.reply})}
+  try{bubble=t;const r=await api.call('chat',{messages:hist.slice(),image,onTok:x=>{bubble=null;t.innerHTML=codeify(x);msgs.scrollTop=msgs.scrollHeight}});bubble=null;t.innerHTML=codeify(r.reply||'');addSpeak(t);autoTalk(t);hist.push({role:'assistant',content:r.reply})}
   catch(e){t.innerHTML=errText(e);t.classList.add('notice');addRetry(t,text,image)}
 }
 // Chat: when something goes wrong, a "🔁 Try again" button asks Drago the same thing again
@@ -262,3 +262,12 @@ document.querySelectorAll('nav i').forEach(i=>i.addEventListener('animationend',
   const apply=c=>{if(!G[c])c='sun';document.documentElement.style.setProperty('--g',G[c]);box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.c===c?'true':'false'))};
   let saved='sun';try{saved=localStorage.getItem('drago-theme')||'sun'}catch(_){}apply(saved);
   box.addEventListener('click',e=>{const b=e.target.closest('button[data-c]');if(!b)return;apply(b.dataset.c);try{localStorage.setItem('drago-theme',b.dataset.c)}catch(_){}})})();
+
+// Settings: "Read answers out loud" — when On, Drago reads each new chat answer out loud by herself (remembered on device)
+function autoTalk(el){try{if(localStorage.getItem('drago-auto-talk')!=='on')return}catch(_){return}const b=el&&el.querySelector('.speak');if(b&&!b.classList.contains('live'))b.click()}
+(()=>{const box=document.getElementById('autoTalk');if(!box)return;
+  if(!('speechSynthesis' in window)){box.previousElementSibling.hidden=true;box.hidden=true;return}
+  const apply=k=>box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.a===k)));
+  let saved='off';try{saved=localStorage.getItem('drago-auto-talk')||'off'}catch(_){}apply(saved);
+  box.addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(!b)return;const k=b.dataset.a;apply(k);try{localStorage.setItem('drago-auto-talk',k)}catch(_){}
+    const ss=window.speechSynthesis;ss.cancel();if(k==='on'){const u=new SpeechSynthesisUtterance('Okay! I will read my answers out loud.');u.rate=1;ss.speak(u)}})})();
