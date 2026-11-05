@@ -176,12 +176,31 @@ if(location.search.includes('listen')){$('#splash').classList.add('gone');listen
 // idea chips: tap one to ask it; they hide after the first message
 const chips=$('#chips');
 if(chips)chips.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$('#chatIn').value=b.textContent.replace(/^\S+\s/,'');$('#chatF').requestSubmit()});
-$('#chatF').addEventListener('submit',()=>{if(chips)chips.hidden=true});
-// New chat button: clears the conversation (keeps Drago's hello and the idea chips)
+// Tip of the day: one short tip under the hello; same tip all day, new tip tomorrow
+const DAY_TIPS=[
+  'Tap 📷 to send Drago a picture',
+  "Double-tap Drago's answer to give it a ❤️",
+  'Tap the dragon logo for a surprise',
+  'Use Image Studio to paint a picture from words',
+  'Say Hey Drago on your phone to open Chat ready to listen',
+  'Tap 🔀 More ideas for new question chips',
+  'Turn on Read answers out loud in Settings',
+  'Pick Drago colors in Settings',
+  'Press Enter in Image/Video/Code Lab to generate',
+  'Tap ✖ to clear what you typed'
+];
+const dayTip=document.createElement('div');
+dayTip.id='daytip';dayTip.className='daytip';dayTip.setAttribute('role','note');
+dayTip.setAttribute('aria-label','Tip of the day');
+{const d=new Date();const dayKey=d.getFullYear()*1000+Math.floor((d-new Date(d.getFullYear(),0,0))/86400000);dayTip.textContent='💡 Tip: '+DAY_TIPS[dayKey%DAY_TIPS.length]}
+const hello=msgs.querySelector('.msg.bot');
+if(hello)hello.after(dayTip);else if(chips)chips.before(dayTip);else msgs.appendChild(dayTip);
+$('#chatF').addEventListener('submit',()=>{if(chips)chips.hidden=true;dayTip.hidden=true});
+// New chat button: clears the conversation (keeps Drago's hello, tip, and the idea chips)
 // Uses a soft in-app confirm card instead of the browser's plain confirm()
 function wipeChat(){
   window.speechSynthesis&&speechSynthesis.cancel();hist.length=0;bubble=null;
-  [...msgs.children].forEach((c,i)=>{if(i>0&&c!==chips)c.remove()});if(chips)chips.hidden=false;
+  [...msgs.children].forEach((c,i)=>{if(i>0&&c!==chips&&c!==dayTip)c.remove()});if(chips)chips.hidden=false;dayTip.hidden=false;
   document.querySelector('nav button')?.click();$('#chatIn').value='';$('#chatIn').dispatchEvent(new Event('input'));$('#chatIn').focus()}
 function askNewChat(){
   if(!hist.length){wipeChat();return}
@@ -348,6 +367,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v60';
-p.setAttribute('aria-label','About Drago, version drago-v60');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v61';
+p.setAttribute('aria-label','About Drago, version drago-v61');
 close.before(p)})();

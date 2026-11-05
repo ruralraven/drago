@@ -162,3 +162,8 @@ nav i.bnc{animation:navBounce .45s cubic-bezier(.3,1.6,.5,1)}
 @media (prefers-reduced-motion:reduce){#confirm,#confirm .ccard{transition:none}}
 /* Settings: About / version line */
 .about{margin:18px 0 4px;padding:10px 12px;border-radius:12px;background:#ffffff08;border:1px solid #ffffff18;font-size:13px;font-weight:600;text-align:center;opacity:.85;letter-spacing:.2px}
+
+/* Chat: tip of the day under the hello message */
+.daytip{align-self:flex-start;max-width:84%;margin:-2px 0 2px;padding:7px 12px;border-radius:999px;background:#ffffff0a;border:1px solid #ffffff22;font-size:13px;line-height:1.35;opacity:.78;color:#e8e4ff;animation:in .45s .15s both}
+.daytip[hidden]{display:none}
+@media (prefers-reduced-motion:reduce){.daytip{animation:none}}
