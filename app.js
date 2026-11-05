@@ -296,3 +296,11 @@ document.addEventListener('click',e=>{const r=e.target.closest('.run');if(r){con
   const b=e.target.closest('.bigbtn');if(!b)return;const f=b.previousElementSibling;if(!f||!f.classList.contains('preview'))return;
   const big=f.classList.toggle('big');b.textContent=big?'↙ Smaller':'⛶ Bigger';b.setAttribute('aria-label',big?'Make the preview smaller':'Make the preview bigger');
   f.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})});
+// Image Studio: "Recent ideas" chips remember your last 4 picture ideas; tap one to use it again
+(()=>{const t=$('#imgIn'),go=$('#imgGo'),st=$('#imgStyle');if(!t||!go||!st)return;const K='drago-img-recent';
+const load=()=>{try{const a=JSON.parse(localStorage.getItem(K)||'[]');return Array.isArray(a)?a.filter(x=>typeof x==='string').slice(0,4):[]}catch(e){return[]}};
+const box=document.createElement('div');box.id='imgRecent';box.className='recent';box.setAttribute('role','group');box.setAttribute('aria-label','Recent picture ideas');st.parentNode.insertBefore(box,st);
+const draw=()=>{const a=load();box.hidden=!a.length;box.innerHTML='';if(!a.length)return;const h=document.createElement('span');h.className='rlab';h.textContent='🕘 Recent:';box.appendChild(h);
+a.forEach(p=>{const b=document.createElement('button');b.type='button';b.textContent=p.length>26?p.slice(0,25)+'…':p;b.title=p;b.setAttribute('aria-label','Use this idea again: '+p);
+b.onclick=()=>{t.value=p;t.dispatchEvent(new Event('input'));t.focus()};box.appendChild(b)})};
+go.addEventListener('click',()=>{const p=t.value.trim();if(!p||go.disabled)return;const a=[p,...load().filter(x=>x!==p)].slice(0,4);try{localStorage.setItem(K,JSON.stringify(a))}catch(e){}draw()},true);draw()})();

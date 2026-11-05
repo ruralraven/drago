@@ -136,3 +136,7 @@ nav i.bnc{animation:navBounce .45s cubic-bezier(.3,1.6,.5,1)}
 .asked{margin:-4px 0 12px;padding:8px 12px;border-radius:12px;background:#ffffff0d;border:1px solid #ffffff22;font-weight:700;font-size:14px;text-align:center}
 .preview{transition:height .3s ease}.preview.big{height:75vh;height:75dvh}.bigbtn{margin:0 0 8px;padding:8px}
 @media (prefers-reduced-motion:reduce){.preview{transition:none}}
+.recent{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0 2px}.recent[hidden]{display:none}
+.recent .rlab{font-size:12px;opacity:.7;margin-right:2px}
+.recent button{background:#ffffff14;border:1px solid #fff2;color:#fff;border-radius:999px;padding:6px 11px;font-size:12.5px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.recent button:active{transform:scale(.96)}.recent button:focus-visible{outline:2px solid #fff;outline-offset:2px}
