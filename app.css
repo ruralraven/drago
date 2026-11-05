@@ -134,3 +134,5 @@ nav i.bnc{animation:navBounce .45s cubic-bezier(.3,1.6,.5,1)}
 .themes button{display:flex;align-items:center;justify-content:center}.themes i{display:block;width:30px;height:30px;border-radius:50%;box-shadow:0 0 0 2px #ffffff33}.themes button[aria-pressed="true"]{background:#ffffff26;border-color:#fff}.themes button[aria-pressed="true"] i{box-shadow:0 0 0 3px #fff}
 .tsize[hidden],.tsl[hidden]{display:none}
 .asked{margin:-4px 0 12px;padding:8px 12px;border-radius:12px;background:#ffffff0d;border:1px solid #ffffff22;font-weight:700;font-size:14px;text-align:center}
+.preview{transition:height .3s ease}.preview.big{height:75vh;height:75dvh}.bigbtn{margin:0 0 8px;padding:8px}
+@media (prefers-reduced-motion:reduce){.preview{transition:none}}

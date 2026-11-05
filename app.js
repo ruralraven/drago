@@ -289,3 +289,10 @@ function talkRate(){let r=1;try{r=parseFloat(localStorage.getItem('drago-talk-ra
 (()=>{const c=document.querySelector('#sheet .card'),h=c&&c.querySelector('h2');if(!h)return;const p=document.createElement('p');p.className='asked';p.setAttribute('aria-live','polite');h.after(p);
 const show=()=>{let n=0;try{n=+localStorage.getItem('drago-asked')||0}catch(_){}p.textContent=n?'🏆 Drago has answered '+n+(n===1?' question':' questions')+' for you!':'🏆 Ask Drago a question to start your count!'};
 show();$('#setBtn').addEventListener('click',show)})();
+// Code Lab: a "Bigger" button under a running preview makes it tall, so games are easier to play
+document.addEventListener('click',e=>{const r=e.target.closest('.run');if(r){const pre=r.closest('pre'),f=pre.nextElementSibling;
+  if(f&&f.classList.contains('preview')){if(!(f.nextElementSibling&&f.nextElementSibling.classList.contains('bigbtn'))){const b=document.createElement('button');b.type='button';b.className='ghost bigbtn';b.textContent='⛶ Bigger';b.setAttribute('aria-label','Make the preview bigger');f.after(b)}}
+  else if(f&&f.classList.contains('bigbtn'))f.remove();return}
+  const b=e.target.closest('.bigbtn');if(!b)return;const f=b.previousElementSibling;if(!f||!f.classList.contains('preview'))return;
+  const big=f.classList.toggle('big');b.textContent=big?'↙ Smaller':'⛶ Bigger';b.setAttribute('aria-label',big?'Make the preview smaller':'Make the preview bigger');
+  f.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})});
