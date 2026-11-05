@@ -320,3 +320,8 @@ const draw=()=>{const a=load();box.hidden=!a.length;box.innerHTML='';if(!a.lengt
 a.forEach(p=>{const b=document.createElement('button');b.type='button';b.textContent=p.length>26?p.slice(0,25)+'…':p;b.title=p;b.setAttribute('aria-label','Use this coding idea again: '+p);
 b.onclick=()=>{t.value=p;t.dispatchEvent(new Event('input'));t.focus()};box.appendChild(b)})};
 go.addEventListener('click',()=>{const p=t.value.trim();if(!p||go.disabled)return;const a=[p,...load().filter(x=>x!==p)].slice(0,4);try{localStorage.setItem(K,JSON.stringify(a))}catch(e){}draw()},true);draw()})();
+// Studios: "✕ Clear" button at the end of each Recent row forgets those ideas (saved on this device)
+(()=>{const K={imgRecent:'drago-img-recent',vidRecent:'drago-vid-recent',codeRecent:'drago-code-recent'};
+const add=box=>{if(box.hidden||!box.children.length||box.querySelector('.rclear'))return;const b=document.createElement('button');b.type='button';b.className='rclear';b.textContent='✕ Clear';b.setAttribute('aria-label','Clear these recent ideas');box.appendChild(b)};
+Object.keys(K).forEach(id=>{const box=document.getElementById(id);if(!box)return;add(box);new MutationObserver(()=>add(box)).observe(box,{childList:true})});
+document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)return;const box=b.closest('.recent');if(!box||!K[box.id])return;try{localStorage.removeItem(K[box.id])}catch(_){}box.innerHTML='';box.hidden=true})})();

@@ -140,3 +140,4 @@ nav i.bnc{animation:navBounce .45s cubic-bezier(.3,1.6,.5,1)}
 .recent .rlab{font-size:12px;opacity:.7;margin-right:2px}
 .recent button{background:#ffffff14;border:1px solid #fff2;color:#fff;border-radius:999px;padding:6px 11px;font-size:12.5px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
 .recent button:active{transform:scale(.96)}.recent button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.recent .rclear{opacity:.7;border-style:dashed;background:transparent}.recent .rclear:hover{opacity:1;background:#ff5c7c22}
