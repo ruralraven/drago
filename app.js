@@ -253,7 +253,7 @@ $('#newChat').onclick=askNewChat;
   b.onclick=()=>{const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;box.scrollTo({top:box.scrollHeight,behavior:reduce?'auto':'smooth'});b.classList.remove('on')}})();
 // Offline banner: a small note at the top when the phone loses internet, hides again when it's back
 (()=>{const n=document.createElement('div');n.id='netNote';n.setAttribute('role','status');n.textContent='📶 No internet right now. Drago will try again when you’re back online.';document.body.appendChild(n);
-  const upd=()=>n.classList.toggle('show',!navigator.onLine);addEventListener('online',upd);addEventListener('offline',upd);upd()})();
+  let was=navigator.onLine;const upd=()=>{const on=navigator.onLine;n.classList.toggle('show',!on);if(on&&!was)toast('📶 Back online!');was=on};addEventListener('online',upd);addEventListener('offline',upd);upd()})();
 // Tabs: Drago remembers which tab you used last (opening with ?listen always starts on Chat)
 (()=>{const btns=[...document.querySelectorAll('nav button')];const mark=()=>btns.forEach(x=>x.setAttribute('aria-current',x.classList.contains('on')?'page':'false'));
   btns.forEach(b=>b.addEventListener('click',()=>{try{localStorage.setItem('drago.tab',b.dataset.t)}catch(_){}mark()}));
@@ -389,6 +389,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v64';
-p.setAttribute('aria-label','About Drago, version drago-v64');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v65';
+p.setAttribute('aria-label','About Drago, version drago-v65');
 close.before(p)})();
