@@ -161,14 +161,35 @@ $('#saveApi').onclick=()=>{localStorage.setItem('drago.api',$('#apiUrl').value.t
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').then(r=>r.update()).catch(()=>{});
   let reloaded=!navigator.serviceWorker.controller;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloaded||document.querySelector('.msg.me'))return;reloaded=true;location.reload()})}
 // voice input (Web Speech API); ?listen opens straight into listening
+// Shows a clear "Listening…" pill and lets a second tap stop the mic
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+let rec=null;
+function micStatus(on){
+  let s=document.getElementById('micStat');
+  if(!s){
+    s=document.createElement('div');s.id='micStat';s.className='micstat';
+    s.setAttribute('role','status');s.setAttribute('aria-live','polite');
+    const bar=$('#chatF');if(bar)bar.before(s);else document.body.appendChild(s);
+  }
+  const m=$('#mic');
+  if(on){
+    s.textContent='🎤 Listening… tap 🎤 again to stop';
+    s.classList.add('on');
+    if(m){m.setAttribute('aria-label','Listening… tap to stop');m.setAttribute('aria-pressed','true')}
+  }else{
+    s.classList.remove('on');s.textContent='';
+    if(m){m.setAttribute('aria-label','Talk');m.setAttribute('aria-pressed','false')}
+  }
+}
 function listen(){
   if(!SR){add(msgs,"🎤 Talking isn't supported in this browser yet. Try Chrome or Safari, or type instead!",'bot notice');return}
-  const r=new SR();r.lang='en-US';r.interimResults=true;const m=$('#mic');m.classList.add('live');
-  r.onresult=e=>{$('#chatIn').value=[...e.results].map(x=>x[0].transcript).join('')};
-  r.onend=()=>{m.classList.remove('live');if($('#chatIn').value.trim())$('#chatF').requestSubmit()};
-  r.onerror=e=>{m.classList.remove('live');if(e.error==='not-allowed')add(msgs,"🎤 I need permission to use the microphone.",'bot notice')};
-  r.start();
+  const m=$('#mic');
+  if(rec){try{rec.abort()}catch(_){}rec=null;m.classList.remove('live');micStatus(false);return}
+  const r=new SR();rec=r;r.lang='en-US';r.interimResults=true;m.classList.add('live');micStatus(true);
+  r.onresult=e=>{$('#chatIn').value=[...e.results].map(x=>x[0].transcript).join('');$('#chatIn').dispatchEvent(new Event('input'))};
+  r.onend=()=>{rec=null;m.classList.remove('live');micStatus(false);if($('#chatIn').value.trim())$('#chatF').requestSubmit()};
+  r.onerror=e=>{rec=null;m.classList.remove('live');micStatus(false);if(e.error==='not-allowed')add(msgs,"🎤 I need permission to use the microphone.",'bot notice')};
+  try{r.start()}catch(_){rec=null;m.classList.remove('live');micStatus(false)}
 }
 $('#mic').onclick=listen;
 if(location.search.includes('listen')){$('#splash').classList.add('gone');listen()}
@@ -367,6 +388,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v62';
-p.setAttribute('aria-label','About Drago, version drago-v62');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v63';
+p.setAttribute('aria-label','About Drago, version drago-v63');
 close.before(p)})();

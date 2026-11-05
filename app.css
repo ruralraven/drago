@@ -168,3 +168,9 @@ nav i.bnc{animation:navBounce .45s cubic-bezier(.3,1.6,.5,1)}
 .daytip{align-self:flex-start;max-width:84%;margin:-2px 0 2px;padding:7px 12px;border-radius:999px;background:#ffffff0a;border:1px solid #ffffff22;font-size:13px;line-height:1.35;opacity:.78;color:#e8e4ff;animation:in .45s .15s both}
 .daytip[hidden]{display:none}
 @media (prefers-reduced-motion:reduce){.daytip{animation:none}}
+
+/* Chat: mic listening status pill (visible while voice input is on) */
+.micstat{align-self:center;margin:0 0 6px;padding:6px 14px;border-radius:999px;background:linear-gradient(90deg,#ff7a18cc,#ff2e63cc);border:1px solid #ffffff44;font-size:13px;font-weight:700;color:#fff;box-shadow:0 4px 18px #ff2e6344;opacity:0;max-height:0;overflow:hidden;transform:translateY(6px);pointer-events:none;transition:opacity .25s,transform .25s,max-height .25s,margin .25s,padding .25s}
+.micstat.on{opacity:1;max-height:48px;transform:none;margin:0 0 6px;padding:6px 14px}
+.micstat:not(.on){margin:0;padding:0}
+@media (prefers-reduced-motion:reduce){.micstat{transition:none}}
