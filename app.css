@@ -146,3 +146,17 @@ nav i.bnc{animation:navBounce .45s cubic-bezier(.3,1.6,.5,1)}
 #toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translate(-50%,12px);z-index:20;padding:10px 18px;border-radius:999px;background:var(--g);color:#fff;font:inherit;font-size:14px;font-weight:700;box-shadow:0 8px 28px #7c5cff66,0 2px 10px #0007;border:1px solid #ffffff33;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;white-space:nowrap}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){#toast{transition:none}}
+
+/* New chat: soft in-app confirm card (replaces browser confirm) */
+#confirm{position:fixed;inset:0;z-index:25;display:flex;align-items:center;justify-content:center;padding:18px;background:#0009;backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .25s}
+#confirm.on{opacity:1;pointer-events:auto}
+#confirm .ccard{width:100%;max-width:340px;background:#141127f2;border:1px solid #ffffff22;border-radius:22px;padding:22px 20px 18px;text-align:center;box-shadow:0 20px 50px #000a,0 0 40px #7c5cff33;transform:translateY(14px) scale(.96);transition:transform .28s cubic-bezier(.2,1.2,.4,1)}
+#confirm.on .ccard{transform:none}
+#confirm .cico{font-size:36px;line-height:1;margin-bottom:8px;filter:drop-shadow(0 4px 12px #7c5cff66)}
+#confirm h3{font-size:20px;margin:0 0 8px;letter-spacing:-.2px}
+#confirm p{opacity:.72;font-size:14px;margin:0 0 18px;line-height:1.4}
+#confirm .cacts{display:flex;flex-direction:column;gap:8px}
+#confirm .cacts .ghost,#confirm .cacts .cta{margin:0;width:100%}
+#confirm .cacts .cta{box-shadow:0 8px 24px #7c5cff55}
+#confirm .cacts .ghost:focus-visible,#confirm .cacts .cta:focus-visible{outline:3px solid #fff;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){#confirm,#confirm .ccard{transition:none}}

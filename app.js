@@ -178,10 +178,27 @@ const chips=$('#chips');
 if(chips)chips.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$('#chatIn').value=b.textContent.replace(/^\S+\s/,'');$('#chatF').requestSubmit()});
 $('#chatF').addEventListener('submit',()=>{if(chips)chips.hidden=true});
 // New chat button: clears the conversation (keeps Drago's hello and the idea chips)
-$('#newChat').onclick=()=>{if(hist.length&&!confirm('Start a new chat? This clears the messages.'))return;
+// Uses a soft in-app confirm card instead of the browser's plain confirm()
+function wipeChat(){
   window.speechSynthesis&&speechSynthesis.cancel();hist.length=0;bubble=null;
   [...msgs.children].forEach((c,i)=>{if(i>0&&c!==chips)c.remove()});if(chips)chips.hidden=false;
-  document.querySelector('nav button')?.click();$('#chatIn').value='';$('#chatIn').focus()};
+  document.querySelector('nav button')?.click();$('#chatIn').value='';$('#chatIn').dispatchEvent(new Event('input'));$('#chatIn').focus()}
+function askNewChat(){
+  if(!hist.length){wipeChat();return}
+  let d=document.getElementById('confirm');
+  if(!d){
+    d=document.createElement('div');d.id='confirm';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-labelledby','confirmTitle');
+    d.innerHTML='<div class="ccard"><div class="cico" aria-hidden="true">🆕</div><h3 id="confirmTitle">Start a new chat?</h3><p>This clears the messages on the screen. Drago will still say hi.</p><div class="cacts"><button type="button" class="ghost ckeep">Keep chatting</button><button type="button" class="cta cgo">Start new</button></div></div>';
+    document.body.appendChild(d);
+    d.addEventListener('click',e=>{if(e.target===d)d.classList.remove('on')});
+    d.querySelector('.ckeep').onclick=()=>d.classList.remove('on');
+    d.querySelector('.cgo').onclick=()=>{d.classList.remove('on');wipeChat()};
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&d.classList.contains('on'))d.classList.remove('on')});
+  }
+  d.classList.add('on');
+  setTimeout(()=>d.querySelector('.ckeep')?.focus(),50);
+}
+$('#newChat').onclick=askNewChat;
 // Friendly hello that matches the time of day (morning / afternoon / evening)
 (()=>{const h=new Date().getHours(),g=h<5?'Hi, night owl! 🦉':h<12?'Good morning! ☀️':h<17?'Good afternoon! 🌤️':'Good evening! 🌙';
   const first=msgs.firstElementChild;if(first&&first.firstChild&&first.firstChild.nodeType===3)first.firstChild.textContent=first.firstChild.textContent.replace(/^Hi!/,g)})();
