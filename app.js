@@ -367,6 +367,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v61';
-p.setAttribute('aria-label','About Drago, version drago-v61');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v62';
+p.setAttribute('aria-label','About Drago, version drago-v62');
 close.before(p)})();
