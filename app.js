@@ -312,3 +312,11 @@ const draw=()=>{const a=load();box.hidden=!a.length;box.innerHTML='';if(!a.lengt
 a.forEach(p=>{const b=document.createElement('button');b.type='button';b.textContent=p.length>26?p.slice(0,25)+'…':p;b.title=p;b.setAttribute('aria-label','Use this video idea again: '+p);
 b.onclick=()=>{t.value=p;t.dispatchEvent(new Event('input'));t.focus()};box.appendChild(b)})};
 go.addEventListener('click',()=>{const p=t.value.trim();if(!p||go.disabled)return;const a=[p,...load().filter(x=>x!==p)].slice(0,4);try{localStorage.setItem(K,JSON.stringify(a))}catch(e){}draw()},true);draw()})();
+// Code Lab: "Recent ideas" chips remember your last 4 coding ideas; tap one to use it again
+(()=>{const t=$('#codeIn'),go=$('#codeGo'),dice=$('#codeDice');if(!t||!go||!dice)return;const K='drago-code-recent';
+const load=()=>{try{const a=JSON.parse(localStorage.getItem(K)||'[]');return Array.isArray(a)?a.filter(x=>typeof x==='string').slice(0,4):[]}catch(e){return[]}};
+const box=document.createElement('div');box.id='codeRecent';box.className='recent';box.setAttribute('role','group');box.setAttribute('aria-label','Recent coding ideas');dice.parentNode.insertBefore(box,dice);
+const draw=()=>{const a=load();box.hidden=!a.length;box.innerHTML='';if(!a.length)return;const h=document.createElement('span');h.className='rlab';h.textContent='🕘 Recent:';box.appendChild(h);
+a.forEach(p=>{const b=document.createElement('button');b.type='button';b.textContent=p.length>26?p.slice(0,25)+'…':p;b.title=p;b.setAttribute('aria-label','Use this coding idea again: '+p);
+b.onclick=()=>{t.value=p;t.dispatchEvent(new Event('input'));t.focus()};box.appendChild(b)})};
+go.addEventListener('click',()=>{const p=t.value.trim();if(!p||go.disabled)return;const a=[p,...load().filter(x=>x!==p)].slice(0,4);try{localStorage.setItem(K,JSON.stringify(a))}catch(e){}draw()},true);draw()})();
