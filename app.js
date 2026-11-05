@@ -345,3 +345,9 @@ go.addEventListener('click',()=>{const p=t.value.trim();if(!p||go.disabled)retur
 const add=box=>{if(box.hidden||!box.children.length||box.querySelector('.rclear'))return;const b=document.createElement('button');b.type='button';b.className='rclear';b.textContent='✕ Clear';b.setAttribute('aria-label','Clear these recent ideas');box.appendChild(b)};
 Object.keys(K).forEach(id=>{const box=document.getElementById(id);if(!box)return;add(box);new MutationObserver(()=>add(box)).observe(box,{childList:true})});
 document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)return;const box=b.closest('.recent');if(!box||!K[box.id])return;try{localStorage.removeItem(K[box.id])}catch(_){}box.innerHTML='';box.hidden=true})})();
+
+// Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
+(()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v60';
+p.setAttribute('aria-label','About Drago, version drago-v60');
+close.before(p)})();

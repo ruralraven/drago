@@ -160,3 +160,5 @@ nav i.bnc{animation:navBounce .45s cubic-bezier(.3,1.6,.5,1)}
 #confirm .cacts .cta{box-shadow:0 8px 24px #7c5cff55}
 #confirm .cacts .ghost:focus-visible,#confirm .cacts .cta:focus-visible{outline:3px solid #fff;outline-offset:2px}
 @media (prefers-reduced-motion:reduce){#confirm,#confirm .ccard{transition:none}}
+/* Settings: About / version line */
+.about{margin:18px 0 4px;padding:10px 12px;border-radius:12px;background:#ffffff08;border:1px solid #ffffff18;font-size:13px;font-weight:600;text-align:center;opacity:.85;letter-spacing:.2px}
