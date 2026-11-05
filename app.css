@@ -174,3 +174,7 @@ nav i.bnc{animation:navBounce .45s cubic-bezier(.3,1.6,.5,1)}
 .micstat.on{opacity:1;max-height:48px;transform:none;margin:0 0 6px;padding:6px 14px}
 .micstat:not(.on){margin:0;padding:0}
 @media (prefers-reduced-motion:reduce){.micstat{transition:none}}
+
+/* Studios: soft empty-state tip when there are no Recent idea chips yet */
+.recent.empty{gap:0}
+.recent .ehint{margin:0;padding:8px 12px;border-radius:12px;background:#ffffff08;border:1px dashed #ffffff28;font-size:12.5px;line-height:1.35;opacity:.75;color:#e8e4ff;width:100%;box-sizing:border-box}
