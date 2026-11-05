@@ -141,3 +141,8 @@ nav i.bnc{animation:navBounce .45s cubic-bezier(.3,1.6,.5,1)}
 .recent button{background:#ffffff14;border:1px solid #fff2;color:#fff;border-radius:999px;padding:6px 11px;font-size:12.5px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
 .recent button:active{transform:scale(.96)}.recent button:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .recent .rclear{opacity:.7;border-style:dashed;background:transparent}.recent .rclear:hover{opacity:1;background:#ff5c7c22}
+
+/* Floating "Copied!" toast */
+#toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translate(-50%,12px);z-index:20;padding:10px 18px;border-radius:999px;background:var(--g);color:#fff;font:inherit;font-size:14px;font-weight:700;box-shadow:0 8px 28px #7c5cff66,0 2px 10px #0007;border:1px solid #ffffff33;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;white-space:nowrap}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}

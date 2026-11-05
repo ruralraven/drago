@@ -69,7 +69,10 @@ const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 function add(box,html,cls){const d=document.createElement('div');d.className='msg '+cls;d.innerHTML=html;box.appendChild(d);box.scrollTop=box.scrollHeight;return d}
 const typing='<span class="typing"><b></b><b></b><b></b></span>';
 function codeify(t){return esc(t).replace(/```\w*\n?([\s\S]*?)```/g,(_,c)=>'<pre>'+(/&lt;(!doctype|html|body|canvas|button|div|script)/i.test(c)?'<button type="button" class="save" aria-label="Save this code as a file">⬇ Save</button><button type="button" class="run">▶ Run it</button>':'')+'<button class="copy">Copy</button><code>'+c+'</code></pre>').replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>')}
-document.addEventListener('click',e=>{if(e.target.classList.contains('copy')){navigator.clipboard?.writeText(e.target.nextSibling.textContent);e.target.textContent='Copied ✓';setTimeout(()=>e.target.textContent='Copy',1500)}});
+// Tiny floating "Copied!" toast (shared by answer Copy and code Copy)
+function toast(msg){let t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';t.setAttribute('role','status');t.setAttribute('aria-live','polite');document.body.appendChild(t)}
+  t.textContent=msg;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),1600)}
+document.addEventListener('click',e=>{if(e.target.classList.contains('copy')){navigator.clipboard?.writeText(e.target.nextSibling.textContent);e.target.textContent='Copied ✓';toast('📋 Copied!');setTimeout(()=>e.target.textContent='Copy',1500)}});
 // Code Lab: "Run it" shows web code working, inside a safe sandbox box (no access to Drago or your data)
 document.addEventListener('click',e=>{const b=e.target.closest('.run');if(!b)return;const pre=b.closest('pre');let f=pre.nextElementSibling;
   if(f&&f.classList.contains('preview')){f.remove();b.textContent='▶ Run it';return}
@@ -84,7 +87,7 @@ function addSpeak(el){addCopy(el);if(!('speechSynthesis' in window))return;const
 // Chat: "Copy answer" button copies Drago's reply text
 function addCopy(el){el.appendChild(document.createElement('br'));const b=document.createElement('button');b.type='button';b.className='copyans';b.textContent='📋 Copy';b.setAttribute('aria-label','Copy this answer');el.appendChild(b);if(navigator.share){const sh=document.createElement('button');sh.type='button';sh.className='shareans';sh.textContent='📤 Share';sh.setAttribute('aria-label','Share this answer');el.appendChild(sh)}}
 document.addEventListener('click',async e=>{const b=e.target.closest('.copyans');if(!b)return;const txt=[...b.parentNode.childNodes].filter(n=>!(n.nodeType===1&&n.matches('button,.speak,.copyans'))).map(n=>n.textContent).join(' ').replace(/\s+/g,' ').trim();
-  try{await navigator.clipboard.writeText(txt);b.textContent='Copied ✓'}catch(_){b.textContent='Could not copy'}setTimeout(()=>b.textContent='📋 Copy',1500)});
+  try{await navigator.clipboard.writeText(txt);b.textContent='Copied ✓';toast('📋 Copied!')}catch(_){b.textContent='Could not copy';toast('Could not copy')}setTimeout(()=>b.textContent='📋 Copy',1500)});
 // Chat: "Share" button sends Drago's answer to Messages, Notes, etc. (only where the phone supports sharing)
 document.addEventListener('click',async e=>{const b=e.target.closest('.shareans');if(!b)return;const txt=[...b.parentNode.childNodes].filter(n=>!(n.nodeType===1&&n.matches('button'))).map(n=>n.textContent).join(' ').replace(/\s+/g,' ').trim();if(!txt)return;
   try{await navigator.share({title:'Drago says',text:'🐉 Drago says: '+txt});b.textContent='Shared ✓';setTimeout(()=>b.textContent='📤 Share',1500)}catch(_){}});
