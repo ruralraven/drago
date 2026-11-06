@@ -228,10 +228,11 @@ if(hello)hello.after(dayTip);else if(chips)chips.before(dayTip);else msgs.append
 $('#chatF').addEventListener('submit',()=>{if(chips)chips.hidden=true;dayTip.hidden=true});
 // New chat button: clears the conversation (keeps Drago's hello, tip, and the idea chips)
 // Uses a soft in-app confirm card instead of the browser's plain confirm()
+// Toast confirms when the chat is wiped (🆕 Fresh chat!)
 function wipeChat(){
   window.speechSynthesis&&speechSynthesis.cancel();hist.length=0;bubble=null;
   [...msgs.children].forEach((c,i)=>{if(i>0&&c!==chips&&c!==dayTip)c.remove()});if(chips)chips.hidden=false;dayTip.hidden=false;
-  document.querySelector('nav button')?.click();$('#chatIn').value='';$('#chatIn').dispatchEvent(new Event('input'));$('#chatIn').focus();syncNewChatPulse()}
+  document.querySelector('nav button')?.click();$('#chatIn').value='';$('#chatIn').dispatchEvent(new Event('input'));$('#chatIn').focus();syncNewChatPulse();toast('🆕 Fresh chat!')}
 function askNewChat(){
   if(!hist.length){wipeChat();return}
   let d=document.getElementById('confirm');
@@ -404,6 +405,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v78';
-p.setAttribute('aria-label','About Drago, version drago-v78');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v79';
+p.setAttribute('aria-label','About Drago, version drago-v79');
 close.before(p)})();
