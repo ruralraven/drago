@@ -273,6 +273,11 @@ b.onclick=()=>{t.value='';try{localStorage.removeItem('drago-draft-'+s.slice(1))
 (()=>{const i=$('#chatIn'),f=$('#chatF');if(!i||!f)return;const s=f.querySelector('.send');if(!s)return;
 const sync=()=>s.classList.toggle('ready',!!i.value.trim());i.addEventListener('input',sync);f.addEventListener('submit',()=>setTimeout(sync,50));
 document.addEventListener('click',()=>setTimeout(sync,60));setInterval(sync,800);sync()})();
+// Studios: Generate buttons glow when the text box has something typed (same idea as Chat ➤ Send)
+(()=>{const pairs=[['#imgIn','#imgGo'],['#vidIn','#vidGo'],['#codeIn','#codeGo']];
+const sync=()=>pairs.forEach(([is,bs])=>{const i=$(is),b=$(bs);if(i&&b)b.classList.toggle('ready',!!i.value.trim())});
+pairs.forEach(([is])=>{const i=$(is);if(i)i.addEventListener('input',sync)});
+document.addEventListener('click',()=>setTimeout(sync,60));sync()})();
 // Chat: "🔀 More ideas" swaps the idea chips for new ones
 (()=>{const c=$('#chips');if(!c)return;const POOL=['🦖 Tell me a dinosaur fact','😂 Tell me a joke','🎮 Give me a game idea','🧠 Quiz me on math','🚀 Tell me a space fact','🐉 Tell me a dragon story','🦈 Tell me an ocean fact','🎨 Give me a drawing idea','🧩 Give me a riddle','🌋 How do volcanoes work?','🤖 How do robots think?','⚡ Tell me a science fact'];
 const b=document.createElement('button');b.type='button';b.className='more';b.textContent='🔀 More ideas';b.setAttribute('aria-label','Show different ideas');c.appendChild(b);
