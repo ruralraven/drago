@@ -349,10 +349,10 @@ function autoTalk(el){try{if(localStorage.getItem('drago-auto-talk')!=='on')retu
 
 // Settings: "Talking speed" — Slow / Normal / Fast for Read aloud (remembered on device)
 function talkRate(){let r=1;try{r=parseFloat(localStorage.getItem('drago-talk-rate'))||1}catch(_){}return Math.min(1.5,Math.max(0.6,r))}
-(()=>{const box=document.getElementById('talkSpeed');if(!box)return;
+(()=>{const L={'0.8':'🐢 Slow talk','1':'🐉 Normal talk','1.25':'🐇 Fast talk'},box=document.getElementById('talkSpeed');if(!box)return;
   if(!('speechSynthesis' in window)){box.previousElementSibling.hidden=true;box.hidden=true;return}
   const apply=r=>box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(parseFloat(b.dataset.r)===r)));apply(talkRate());
-  box.addEventListener('click',e=>{const b=e.target.closest('button[data-r]');if(!b)return;const r=parseFloat(b.dataset.r);apply(r);try{localStorage.setItem('drago-talk-rate',String(r))}catch(_){}
+  box.addEventListener('click',e=>{const b=e.target.closest('button[data-r]');if(!b)return;const r=parseFloat(b.dataset.r);apply(r);try{localStorage.setItem('drago-talk-rate',String(r))}catch(_){}toast(L[String(r)]||'Talking speed updated');
     const ss=window.speechSynthesis;ss.cancel();const u=new SpeechSynthesisUtterance(r<1?'I will talk slowly.':r>1?'I will talk fast!':'I will talk at normal speed.');u.lang='en-US';u.rate=r;ss.speak(u)})})();
 // Settings: a small trophy line shows how many questions Drago has answered for you (counted on this device)
 (()=>{const c=document.querySelector('#sheet .card'),h=c&&c.querySelector('h2');if(!h)return;const p=document.createElement('p');p.className='asked';p.setAttribute('aria-live','polite');h.after(p);
@@ -398,6 +398,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v72';
-p.setAttribute('aria-label','About Drago, version drago-v72');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v73';
+p.setAttribute('aria-label','About Drago, version drago-v73');
 close.before(p)})();
