@@ -340,11 +340,11 @@ document.querySelectorAll('nav i').forEach(i=>i.addEventListener('animationend',
 
 // Settings: "Read answers out loud" — when On, Drago reads each new chat answer out loud by herself (remembered on device)
 function autoTalk(el){try{if(localStorage.getItem('drago-auto-talk')!=='on')return}catch(_){return}const b=el&&el.querySelector('.speak');if(b&&!b.classList.contains('live'))b.click()}
-(()=>{const box=document.getElementById('autoTalk');if(!box)return;
+(()=>{const L={off:'🔇 Voice off',on:'🔊 Voice on'},box=document.getElementById('autoTalk');if(!box)return;
   if(!('speechSynthesis' in window)){box.previousElementSibling.hidden=true;box.hidden=true;return}
   const apply=k=>box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.a===k)));
   let saved='off';try{saved=localStorage.getItem('drago-auto-talk')||'off'}catch(_){}apply(saved);
-  box.addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(!b)return;const k=b.dataset.a;apply(k);try{localStorage.setItem('drago-auto-talk',k)}catch(_){}
+  box.addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(!b)return;const k=b.dataset.a;apply(k);try{localStorage.setItem('drago-auto-talk',k)}catch(_){}toast(L[k]||'Voice updated');
     const ss=window.speechSynthesis;ss.cancel();if(k==='on'){const u=new SpeechSynthesisUtterance('Okay! I will read my answers out loud.');u.rate=talkRate();ss.speak(u)}})})();
 
 // Settings: "Talking speed" — Slow / Normal / Fast for Read aloud (remembered on device)
@@ -398,6 +398,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v71';
-p.setAttribute('aria-label','About Drago, version drago-v71');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v72';
+p.setAttribute('aria-label','About Drago, version drago-v72');
 close.before(p)})();
