@@ -113,7 +113,7 @@ async function ask(text,image){
 // Chat: when something goes wrong, a "🔁 Try again" button asks Drago the same thing again
 function addRetry(t,text,image){const b=document.createElement('button');b.type='button';b.className='retry';b.textContent='🔁 Try again';b.setAttribute('aria-label','Ask Drago the same thing again');
   b.onclick=()=>{t.remove();ask(text,image)};t.appendChild(document.createElement('br'));t.appendChild(b)}
-$('#chatF').onsubmit=e=>{e.preventDefault();const v=$('#chatIn').value.trim();if(!v)return;$('#chatIn').value='';addReuse(add(msgs,esc(v),'me'),v);hist.push({role:'user',content:v});syncNewChatPulse();ask(v)};
+$('#chatF').onsubmit=e=>{e.preventDefault();const v=$('#chatIn').value.trim();if(!v){const shake=el=>{el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake')};const I=$('#chatIn'),S=$('#chatF').querySelector('.send');shake(I);if(S)shake(S);toast('💡 Type a question first (or tap an idea chip)');I.focus();return}$('#chatIn').value='';addReuse(add(msgs,esc(v),'me'),v);hist.push({role:'user',content:v});syncNewChatPulse();ask(v)};
 $('#pic').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{add(msgs,'<img src="'+rd.result+'">','me');hist.push({role:'user',content:'What is in this picture?'});syncNewChatPulse();ask('',rd.result)};rd.readAsDataURL(f);e.target.value=''};
 // studios
 function studio(btn,inp,out,path,render){$(btn).onclick=async()=>{const B=$(btn);if(B.disabled)return;const I=$(inp),p=I.value.trim();
@@ -398,6 +398,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v69';
-p.setAttribute('aria-label','About Drago, version drago-v69');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v70';
+p.setAttribute('aria-label','About Drago, version drago-v70');
 close.before(p)})();
