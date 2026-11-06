@@ -187,3 +187,8 @@ nav i.bnc{animation:navBounce .45s cubic-bezier(.3,1.6,.5,1)}
 .shake{animation:shakeHint .45s ease}
 @keyframes shakeHint{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 @media (prefers-reduced-motion:reduce){.shake{animation:none;outline:2px solid #ffb86c;outline-offset:2px}}
+
+/* New chat: soft pulse when the chat has messages you can clear */
+#newChat.has-msgs{animation:newPulse 2.2s ease-in-out infinite}
+@keyframes newPulse{0%,100%{box-shadow:0 0 0 0 #7c5cff00;filter:brightness(1)}50%{box-shadow:0 0 0 7px #7c5cff33,0 0 18px #7c5cff66;filter:brightness(1.15)}}
+@media (prefers-reduced-motion:reduce){#newChat.has-msgs{animation:none;box-shadow:0 0 0 2px #7c5cff99}}
