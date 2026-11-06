@@ -333,10 +333,10 @@ document.querySelectorAll('nav i').forEach(i=>i.addEventListener('animationend',
   box.addEventListener('click',e=>{const b=e.target.closest('button[data-s]');if(!b)return;apply(b.dataset.s);try{localStorage.setItem('drago-text-size',b.dataset.s)}catch(_){}})})();
 
 // Settings: pick Drago's colors (changes the gradient on buttons and titles), remembered on device
-(()=>{const G={sun:'linear-gradient(135deg,#ff7a18,#ff2e63 55%,#7c5cff)',sea:'linear-gradient(135deg,#22d3ee,#3b82f6 55%,#6366f1)',leaf:'linear-gradient(135deg,#a3e635,#22c55e 55%,#0d9488)',candy:'linear-gradient(135deg,#f9a8d4,#ec4899 55%,#a855f7)'},box=document.getElementById('theme');if(!box)return;
+(()=>{const G={sun:'linear-gradient(135deg,#ff7a18,#ff2e63 55%,#7c5cff)',sea:'linear-gradient(135deg,#22d3ee,#3b82f6 55%,#6366f1)',leaf:'linear-gradient(135deg,#a3e635,#22c55e 55%,#0d9488)',candy:'linear-gradient(135deg,#f9a8d4,#ec4899 55%,#a855f7)'},L={sun:'🌅 Sunset colors',sea:'🌊 Ocean colors',leaf:'🌿 Forest colors',candy:'🍬 Candy colors'},box=document.getElementById('theme');if(!box)return;
   const apply=c=>{if(!G[c])c='sun';document.documentElement.style.setProperty('--g',G[c]);box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.c===c?'true':'false'))};
   let saved='sun';try{saved=localStorage.getItem('drago-theme')||'sun'}catch(_){}apply(saved);
-  box.addEventListener('click',e=>{const b=e.target.closest('button[data-c]');if(!b)return;apply(b.dataset.c);try{localStorage.setItem('drago-theme',b.dataset.c)}catch(_){}})})();
+  box.addEventListener('click',e=>{const b=e.target.closest('button[data-c]');if(!b)return;apply(b.dataset.c);try{localStorage.setItem('drago-theme',b.dataset.c)}catch(_){}toast(L[b.dataset.c]||'🎨 Colors updated')})})();
 
 // Settings: "Read answers out loud" — when On, Drago reads each new chat answer out loud by herself (remembered on device)
 function autoTalk(el){try{if(localStorage.getItem('drago-auto-talk')!=='on')return}catch(_){return}const b=el&&el.querySelector('.speak');if(b&&!b.classList.contains('live'))b.click()}
@@ -398,6 +398,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v68';
-p.setAttribute('aria-label','About Drago, version drago-v68');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v69';
+p.setAttribute('aria-label','About Drago, version drago-v69');
 close.before(p)})();
