@@ -288,10 +288,10 @@ document.addEventListener('click',()=>setTimeout(sync,60));setInterval(sync,800)
 const sync=()=>pairs.forEach(([is,bs])=>{const i=$(is),b=$(bs);if(i&&b)b.classList.toggle('ready',!!i.value.trim())});
 pairs.forEach(([is])=>{const i=$(is);if(i)i.addEventListener('input',sync)});
 document.addEventListener('click',()=>setTimeout(sync,60));sync()})();
-// Chat: "🔀 More ideas" swaps the idea chips for new ones
+// Chat: tapping More ideas shows a short toast
 (()=>{const c=$('#chips');if(!c)return;const POOL=['🦖 Tell me a dinosaur fact','😂 Tell me a joke','🎮 Give me a game idea','🧠 Quiz me on math','🚀 Tell me a space fact','🐉 Tell me a dragon story','🦈 Tell me an ocean fact','🎨 Give me a drawing idea','🧩 Give me a riddle','🌋 How do volcanoes work?','🤖 How do robots think?','⚡ Tell me a science fact'];
 const b=document.createElement('button');b.type='button';b.className='more';b.textContent='🔀 More ideas';b.setAttribute('aria-label','Show different ideas');c.appendChild(b);
-b.addEventListener('click',e=>{e.stopPropagation();const old=[...c.querySelectorAll('button:not(.more)')];const cur=old.map(x=>x.textContent);const pick=POOL.filter(p=>!cur.includes(p)).sort(()=>Math.random()-.5).slice(0,old.length);old.forEach((x,i)=>{if(pick[i])x.textContent=pick[i]})},true)})();
+b.addEventListener('click',e=>{e.stopPropagation();const old=[...c.querySelectorAll('button:not(.more)')];const cur=old.map(x=>x.textContent);const pick=POOL.filter(p=>!cur.includes(p)).sort(()=>Math.random()-.5).slice(0,old.length);old.forEach((x,i)=>{if(pick[i])x.textContent=pick[i]});toast('🔀 New ideas!')},true)})();
 
 // Chat: a small ✏️ button on your own messages puts that text back in the box so you can change it and ask again
 function addReuse(el,v){const b=document.createElement('button');b.type='button';b.className='reuse';b.textContent='✏️';b.title='Use this again';b.setAttribute('aria-label','Put this message back in the text box');
@@ -404,6 +404,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v77';
-p.setAttribute('aria-label','About Drago, version drago-v77');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v78';
+p.setAttribute('aria-label','About Drago, version drago-v78');
 close.before(p)})();
