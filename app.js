@@ -327,10 +327,10 @@ document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()
 document.querySelectorAll('nav i').forEach(i=>i.addEventListener('animationend',()=>i.classList.remove('bnc')));
 
 // Settings: pick the chat text size (small / medium / big); Drago remembers it on this device
-(()=>{const sizes={s:'14px',m:'16px',l:'20px'},box=document.getElementById('tsize');if(!box)return;
+(()=>{const sizes={s:'14px',m:'16px',l:'20px'},L={s:'🔤 Small text',m:'🔤 Medium text',l:'🔤 Big text'},box=document.getElementById('tsize');if(!box)return;
   const apply=k=>{if(!sizes[k])k='m';document.documentElement.style.setProperty('--msgfs',sizes[k]);box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.s===k)))};
   let saved='m';try{saved=localStorage.getItem('drago-text-size')||'m'}catch(_){}apply(saved);
-  box.addEventListener('click',e=>{const b=e.target.closest('button[data-s]');if(!b)return;apply(b.dataset.s);try{localStorage.setItem('drago-text-size',b.dataset.s)}catch(_){}})})();
+  box.addEventListener('click',e=>{const b=e.target.closest('button[data-s]');if(!b)return;apply(b.dataset.s);try{localStorage.setItem('drago-text-size',b.dataset.s)}catch(_){}toast(L[b.dataset.s]||'🔤 Text size updated')})})();
 
 // Settings: pick Drago's colors (changes the gradient on buttons and titles), remembered on device
 (()=>{const G={sun:'linear-gradient(135deg,#ff7a18,#ff2e63 55%,#7c5cff)',sea:'linear-gradient(135deg,#22d3ee,#3b82f6 55%,#6366f1)',leaf:'linear-gradient(135deg,#a3e635,#22c55e 55%,#0d9488)',candy:'linear-gradient(135deg,#f9a8d4,#ec4899 55%,#a855f7)'},L={sun:'🌅 Sunset colors',sea:'🌊 Ocean colors',leaf:'🌿 Forest colors',candy:'🍬 Candy colors'},box=document.getElementById('theme');if(!box)return;
@@ -398,6 +398,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v70';
-p.setAttribute('aria-label','About Drago, version drago-v70');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v71';
+p.setAttribute('aria-label','About Drago, version drago-v71');
 close.before(p)})();
