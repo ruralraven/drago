@@ -113,8 +113,8 @@ async function ask(text,image){
 // Chat: when something goes wrong, a "🔁 Try again" button asks Drago the same thing again
 function addRetry(t,text,image){const b=document.createElement('button');b.type='button';b.className='retry';b.textContent='🔁 Try again';b.setAttribute('aria-label','Ask Drago the same thing again');
   b.onclick=()=>{t.remove();ask(text,image)};t.appendChild(document.createElement('br'));t.appendChild(b)}
-$('#chatF').onsubmit=e=>{e.preventDefault();const v=$('#chatIn').value.trim();if(!v)return;$('#chatIn').value='';addReuse(add(msgs,esc(v),'me'),v);hist.push({role:'user',content:v});ask(v)};
-$('#pic').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{add(msgs,'<img src="'+rd.result+'">','me');hist.push({role:'user',content:'What is in this picture?'});ask('',rd.result)};rd.readAsDataURL(f);e.target.value=''};
+$('#chatF').onsubmit=e=>{e.preventDefault();const v=$('#chatIn').value.trim();if(!v)return;$('#chatIn').value='';addReuse(add(msgs,esc(v),'me'),v);hist.push({role:'user',content:v});syncNewChatPulse();ask(v)};
+$('#pic').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{add(msgs,'<img src="'+rd.result+'">','me');hist.push({role:'user',content:'What is in this picture?'});syncNewChatPulse();ask('',rd.result)};rd.readAsDataURL(f);e.target.value=''};
 // studios
 function studio(btn,inp,out,path,render){$(btn).onclick=async()=>{const B=$(btn);if(B.disabled)return;const I=$(inp),p=I.value.trim();
 // Empty idea box: gentle shake + tip (pairs with the purple ready glow)
@@ -225,7 +225,7 @@ $('#chatF').addEventListener('submit',()=>{if(chips)chips.hidden=true;dayTip.hid
 function wipeChat(){
   window.speechSynthesis&&speechSynthesis.cancel();hist.length=0;bubble=null;
   [...msgs.children].forEach((c,i)=>{if(i>0&&c!==chips&&c!==dayTip)c.remove()});if(chips)chips.hidden=false;dayTip.hidden=false;
-  document.querySelector('nav button')?.click();$('#chatIn').value='';$('#chatIn').dispatchEvent(new Event('input'));$('#chatIn').focus()}
+  document.querySelector('nav button')?.click();$('#chatIn').value='';$('#chatIn').dispatchEvent(new Event('input'));$('#chatIn').focus();syncNewChatPulse()}
 function askNewChat(){
   if(!hist.length){wipeChat();return}
   let d=document.getElementById('confirm');
@@ -241,7 +241,8 @@ function askNewChat(){
   d.classList.add('on');
   setTimeout(()=>d.querySelector('.ckeep')?.focus(),50);
 }
-$('#newChat').onclick=askNewChat;
+function syncNewChatPulse(){const b=$('#newChat');if(!b)return;const on=hist.length>0;b.classList.toggle('has-msgs',on);b.title=on?'New chat — tap to start fresh':'New chat'}
+$('#newChat').onclick=askNewChat;syncNewChatPulse();
 // Friendly hello that matches the time of day (morning / afternoon / evening)
 (()=>{const h=new Date().getHours(),g=h<5?'Hi, night owl! 🦉':h<12?'Good morning! ☀️':h<17?'Good afternoon! 🌤️':'Good evening! 🌙';
   const first=msgs.firstElementChild;if(first&&first.firstChild&&first.firstChild.nodeType===3)first.firstChild.textContent=first.firstChild.textContent.replace(/^Hi!/,g)})();
@@ -397,6 +398,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v67';
-p.setAttribute('aria-label','About Drago, version drago-v67');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v68';
+p.setAttribute('aria-label','About Drago, version drago-v68');
 close.before(p)})();
