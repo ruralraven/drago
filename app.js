@@ -124,7 +124,9 @@ const lbl=B.textContent;B.disabled=true;B.classList.add('busy');B.textContent='�
 let imgStyle=localStorage.getItem('drago.imgStyle')||'';
 const styleBox=$('#imgStyle');
 function showStyle(){styleBox&&styleBox.querySelectorAll('button').forEach(b=>{const on=b.dataset.s===imgStyle;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)})}
-if(styleBox){styleBox.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;imgStyle=b.dataset.s;localStorage.setItem('drago.imgStyle',imgStyle);showStyle()});showStyle()}
+// Image Studio: tapping a style chip shows a short toast (silent on initial apply)
+if(styleBox){const L={'':'🖍️ Cartoon style','pixel art, 8-bit':'👾 Pixel art style','soft watercolor painting':'🎨 Watercolor style','3D render, toy-like':'🧸 3D style','pencil sketch':'✏️ Sketch style'};
+styleBox.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;imgStyle=b.dataset.s;localStorage.setItem('drago.imgStyle',imgStyle);showStyle();toast(L[imgStyle]||((b.textContent||'').trim()+' style')||'Style updated')});showStyle()}
 studio('#imgGo','#imgIn','#imgOut','image',r=>'<img src="'+esc(r.url)+'" alt="Picture Drago made" style="width:100%;border-radius:14px"><div class="imgacts"><button type="button" class="again">🔁 Make another</button><button type="button" class="savepic" data-u="'+esc(r.url)+'" aria-label="Save this picture">⬇ Save picture</button><a class="open" href="'+esc(r.url)+'" target="_blank" rel="noopener">🔍 Full size</a></div>');
 // Image Studio: shape chips (Square, Wide, Tall); remembers your pick
 let imgShape=localStorage.getItem('drago.imgShape')||'sq';
@@ -398,6 +400,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v73';
-p.setAttribute('aria-label','About Drago, version drago-v73');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v74';
+p.setAttribute('aria-label','About Drago, version drago-v74');
 close.before(p)})();
