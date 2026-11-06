@@ -139,7 +139,7 @@ if(shapeBox){const L={sq:'⬜ Square picture',wide:'▭ Wide picture',tall:'▮ 
 shapeBox.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;imgShape=b.dataset.p;localStorage.setItem('drago.imgShape',imgShape);showShape();toast(L[imgShape]||((b.textContent||'').trim()+' picture')||'Shape updated')});showShape()}
 // Image Studio: "Surprise me" fills in a random fun picture idea
 const IDEAS=['A dragon baking cupcakes in a cozy kitchen','A robot surfing a giant wave at sunset','A castle made of candy on a cloud','An astronaut cat floating past Saturn','A neon cube racing through a city at night','A friendly octopus playing drums under the sea','A treehouse city in a glowing forest','A penguin knight riding a polar bear','A volcano that erupts rainbow sprinkles','A tiny dragon sleeping in a teacup'];
-$('#imgDice').onclick=()=>{const cur=$('#imgIn').value;let n;do{n=IDEAS[Math.floor(Math.random()*IDEAS.length)]}while(n===cur);$('#imgIn').value=n;$('#imgIn').focus()};
+$('#imgDice').onclick=()=>{const cur=$('#imgIn').value;let n;do{n=IDEAS[Math.floor(Math.random()*IDEAS.length)]}while(n===cur);$('#imgIn').value=n;$('#imgIn').focus();toast('🎲 New idea!')};
 // Image Studio: "Make another" paints a new version of the same idea
 $('#imgOut').addEventListener('click',e=>{if(e.target.closest('.again'))$('#imgGo').click()});
 // Image Studio: "Save picture" downloads the picture (opens it full size if the download is blocked)
@@ -148,13 +148,13 @@ $('#imgOut').addEventListener('click',async e=>{const b=e.target.closest('.savep
   catch(_){window.open(u,'_blank','noopener');b.textContent='Opened ✓'}
   setTimeout(()=>b.textContent='⬇ Save picture',1500)});
 const VIDEAS=['A cube dashing through a neon city','A baby dragon learning to fly over a rainbow','A rocket blasting off to a candy planet','A robot dancing in a disco under the sea','A cat surfing a giant wave at sunset','A volcano that erupts glitter and confetti','A spaceship racing through a field of glowing asteroids','A penguin riding a skateboard down a snowy mountain'];
-$('#vidDice').onclick=()=>{const cur=$('#vidIn').value;let n;do{n=VIDEAS[Math.floor(Math.random()*VIDEAS.length)]}while(n===cur);$('#vidIn').value=n;$('#vidIn').focus()};
+$('#vidDice').onclick=()=>{const cur=$('#vidIn').value;let n;do{n=VIDEAS[Math.floor(Math.random()*VIDEAS.length)]}while(n===cur);$('#vidIn').value=n;$('#vidIn').focus();toast('🎲 New idea!')};
 studio('#vidGo','#vidIn','#vidOut','video',r=>'<video src="'+esc(r.url)+'" controls autoplay loop playsinline style="width:100%;border-radius:14px"></video><div class="imgacts"><button type="button" class="again" aria-label="Make a new video of the same idea">🔁 Make another</button><a class="open" href="'+esc(r.url)+'" target="_blank" rel="noopener">🔍 Full size</a></div>');
 // Video Studio: "Make another" makes a new video of the same idea
 $('#vidOut').addEventListener('click',e=>{if(e.target.closest('.again'))$('#vidGo').click()});
 // Code Lab: "Surprise me" fills in a random fun coding idea
 const CIDEAS=['Make a button that changes color when I click it','Make a dice roller that shows a random number from 1 to 6','Make a star that follows my mouse','Make a simple clicker game with a score','Make a page with a bouncing ball','Make a rainbow text that keeps changing colors','Make a quiz with 3 math questions','Make a stopwatch with start and stop buttons','Make a dragon emoji that jumps when I press space'];
-$('#codeDice').onclick=()=>{const cur=$('#codeIn').value;let n;do{n=CIDEAS[Math.floor(Math.random()*CIDEAS.length)]}while(n===cur);$('#codeIn').value=n;$('#codeIn').focus()};
+$('#codeDice').onclick=()=>{const cur=$('#codeIn').value;let n;do{n=CIDEAS[Math.floor(Math.random()*CIDEAS.length)]}while(n===cur);$('#codeIn').value=n;$('#codeIn').focus();toast('🎲 New idea!')};
 // Code Lab: kind chips (Any, Web page, Game, Python); remembers your pick
 let codeKind=localStorage.getItem('drago.codeKind')||'';
 const kindBox=$('#codeKind');
@@ -404,6 +404,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v76';
-p.setAttribute('aria-label','About Drago, version drago-v76');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v77';
+p.setAttribute('aria-label','About Drago, version drago-v77');
 close.before(p)})();
