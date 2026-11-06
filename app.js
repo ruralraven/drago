@@ -159,7 +159,9 @@ $('#codeDice').onclick=()=>{const cur=$('#codeIn').value;let n;do{n=CIDEAS[Math.
 let codeKind=localStorage.getItem('drago.codeKind')||'';
 const kindBox=$('#codeKind');
 function showKind(){kindBox&&kindBox.querySelectorAll('button').forEach(b=>{const on=b.dataset.k===codeKind;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)})}
-if(kindBox){kindBox.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;codeKind=b.dataset.k;localStorage.setItem('drago.codeKind',codeKind);showKind()});showKind()}
+// Code Lab: tapping a kind chip shows a short toast (silent on initial apply)
+if(kindBox){const L={'':'✨ Any code','Make it a web page in one HTML file I can run.':'🌐 Web page code','Make it a small game in one HTML file using a canvas, with simple controls.':'🎮 Game code','Write it in Python.':'🐍 Python code'};
+kindBox.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;codeKind=b.dataset.k;localStorage.setItem('drago.codeKind',codeKind);showKind();toast(L[codeKind]||((b.textContent||'').trim()+' code')||'Code kind updated')});showKind()}
 studio('#codeGo','#codeIn','#codeOut','code',r=>codeify(r.reply||''));
 // settings
 $('#setBtn').onclick=()=>{$('#apiUrl').value=api.url;$('#sheet').classList.add('on')};
@@ -402,6 +404,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v75';
-p.setAttribute('aria-label','About Drago, version drago-v75');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v76';
+p.setAttribute('aria-label','About Drago, version drago-v76');
 close.before(p)})();
