@@ -116,7 +116,10 @@ function addRetry(t,text,image){const b=document.createElement('button');b.type=
 $('#chatF').onsubmit=e=>{e.preventDefault();const v=$('#chatIn').value.trim();if(!v)return;$('#chatIn').value='';addReuse(add(msgs,esc(v),'me'),v);hist.push({role:'user',content:v});ask(v)};
 $('#pic').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{add(msgs,'<img src="'+rd.result+'">','me');hist.push({role:'user',content:'What is in this picture?'});ask('',rd.result)};rd.readAsDataURL(f);e.target.value=''};
 // studios
-function studio(btn,inp,out,path,render){$(btn).onclick=async()=>{const B=$(btn);if(B.disabled)return;const lbl=B.textContent;B.disabled=true;B.classList.add('busy');B.textContent='⏳ Working…';const p=$(inp).value.trim()||$(inp).placeholder;const o=$(out);o.innerHTML='';const t=add(o,typing+(path==='image'?' 🎨 Drawing… (can take ~20s)':path==='code'?' 💻 Writing code…':''),'bot');try{bubble=t;t.innerHTML=render(await api.call(path,{prompt:p,onTok:x=>{bubble=null;t.innerHTML=codeify(x)}}));bubble=null}catch(e){t.innerHTML=errText(e);t.classList.add('notice')}finally{B.disabled=false;B.classList.remove('busy');B.textContent=lbl}}}
+function studio(btn,inp,out,path,render){$(btn).onclick=async()=>{const B=$(btn);if(B.disabled)return;const I=$(inp),p=I.value.trim();
+// Empty idea box: gentle shake + tip (pairs with the purple ready glow)
+if(!p){const shake=el=>{el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake')};shake(B);shake(I);toast('💡 Type an idea first (or tap 🎲 Surprise me)');I.focus();return}
+const lbl=B.textContent;B.disabled=true;B.classList.add('busy');B.textContent='⏳ Working…';const o=$(out);o.innerHTML='';const t=add(o,typing+(path==='image'?' 🎨 Drawing… (can take ~20s)':path==='code'?' 💻 Writing code…':''),'bot');try{bubble=t;t.innerHTML=render(await api.call(path,{prompt:p,onTok:x=>{bubble=null;t.innerHTML=codeify(x)}}));bubble=null}catch(e){t.innerHTML=errText(e);t.classList.add('notice')}finally{B.disabled=false;B.classList.remove('busy');B.textContent=lbl}}}
 // Image Studio: style chips (Cartoon, Pixel art, Watercolor, 3D, Sketch); remembers your pick
 let imgStyle=localStorage.getItem('drago.imgStyle')||'';
 const styleBox=$('#imgStyle');
@@ -394,6 +397,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v65';
-p.setAttribute('aria-label','About Drago, version drago-v65');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v67';
+p.setAttribute('aria-label','About Drago, version drago-v67');
 close.before(p)})();

@@ -182,3 +182,8 @@ nav i.bnc{animation:navBounce .45s cubic-bezier(.3,1.6,.5,1)}
 /* Studios: soft empty-state tip when there are no Recent idea chips yet */
 .recent.empty{gap:0}
 .recent .ehint{margin:0;padding:8px 12px;border-radius:12px;background:#ffffff08;border:1px dashed #ffffff28;font-size:12.5px;line-height:1.35;opacity:.75;color:#e8e4ff;width:100%;box-sizing:border-box}
+
+/* Studios: empty Generate gently shakes the button + idea box */
+.shake{animation:shakeHint .45s ease}
+@keyframes shakeHint{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+@media (prefers-reduced-motion:reduce){.shake{animation:none;outline:2px solid #ffb86c;outline-offset:2px}}
