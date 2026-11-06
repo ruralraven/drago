@@ -134,7 +134,9 @@ const SHAPES={sq:[768,768],wide:[1024,576],tall:[576,1024]};
 function imgW(){return(SHAPES[imgShape]||SHAPES.sq)[0]}function imgH(){return(SHAPES[imgShape]||SHAPES.sq)[1]}
 const shapeBox=$('#imgShape');
 function showShape(){shapeBox&&shapeBox.querySelectorAll('button').forEach(b=>{const on=b.dataset.p===imgShape;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)})}
-if(shapeBox){shapeBox.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;imgShape=b.dataset.p;localStorage.setItem('drago.imgShape',imgShape);showShape()});showShape()}
+// Image Studio: tapping a shape chip shows a short toast (silent on initial apply)
+if(shapeBox){const L={sq:'⬜ Square picture',wide:'▭ Wide picture',tall:'▮ Tall picture'};
+shapeBox.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;imgShape=b.dataset.p;localStorage.setItem('drago.imgShape',imgShape);showShape();toast(L[imgShape]||((b.textContent||'').trim()+' picture')||'Shape updated')});showShape()}
 // Image Studio: "Surprise me" fills in a random fun picture idea
 const IDEAS=['A dragon baking cupcakes in a cozy kitchen','A robot surfing a giant wave at sunset','A castle made of candy on a cloud','An astronaut cat floating past Saturn','A neon cube racing through a city at night','A friendly octopus playing drums under the sea','A treehouse city in a glowing forest','A penguin knight riding a polar bear','A volcano that erupts rainbow sprinkles','A tiny dragon sleeping in a teacup'];
 $('#imgDice').onclick=()=>{const cur=$('#imgIn').value;let n;do{n=IDEAS[Math.floor(Math.random()*IDEAS.length)]}while(n===cur);$('#imgIn').value=n;$('#imgIn').focus()};
@@ -400,6 +402,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v74';
-p.setAttribute('aria-label','About Drago, version drago-v74');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v75';
+p.setAttribute('aria-label','About Drago, version drago-v75');
 close.before(p)})();
