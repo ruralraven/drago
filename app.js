@@ -90,7 +90,7 @@ document.addEventListener('click',async e=>{const b=e.target.closest('.copyans')
   try{await navigator.clipboard.writeText(txt);b.textContent='Copied ✓';toast('📋 Copied!')}catch(_){b.textContent='Could not copy';toast('Could not copy')}setTimeout(()=>b.textContent='📋 Copy',1500)});
 // Chat: "Share" button sends Drago's answer to Messages, Notes, etc. (only where the phone supports sharing)
 document.addEventListener('click',async e=>{const b=e.target.closest('.shareans');if(!b)return;const txt=[...b.parentNode.childNodes].filter(n=>!(n.nodeType===1&&n.matches('button'))).map(n=>n.textContent).join(' ').replace(/\s+/g,' ').trim();if(!txt)return;
-  try{await navigator.share({title:'Drago says',text:'🐉 Drago says: '+txt});b.textContent='Shared ✓';setTimeout(()=>b.textContent='📤 Share',1500)}catch(_){}});
+  try{await navigator.share({title:'Drago says',text:'🐉 Drago says: '+txt});b.textContent='Shared ✓';toast('📤 Shared!');setTimeout(()=>b.textContent='📤 Share',1500)}catch(_){}});
 document.addEventListener('click',e=>{const b=e.target.closest('.speak');if(!b)return;const ss=window.speechSynthesis;
   if(b.classList.contains('live')){ss.cancel();return}
   ss.cancel();document.querySelectorAll('.speak.live').forEach(x=>{x.classList.remove('live');x.textContent='🔊 Read aloud'});
@@ -405,6 +405,6 @@ document.addEventListener('click',e=>{const b=e.target.closest('.rclear');if(!b)
 
 // Settings: About Drago line at the bottom shows the app version (matches the service worker cache name)
 (()=>{const card=document.querySelector('#sheet .card'),close=document.getElementById('closeSet');if(!card||!close)return;
-const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v79';
-p.setAttribute('aria-label','About Drago, version drago-v79');
+const p=document.createElement('p');p.className='about';p.textContent='🐉 About Drago · drago-v80';
+p.setAttribute('aria-label','About Drago, version drago-v80');
 close.before(p)})();
